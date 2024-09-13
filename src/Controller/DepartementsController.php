@@ -36,7 +36,7 @@ class DepartementsController extends AbstractController
     /**
     * @return Response
     **/
-    #[Route('/departement/list', name: 'app_departements', methods: ['GET'])]
+    #[Route('/api/departement/list', name: 'app_departements', methods: ['GET'])]
     public function departmentList(EntityManagerInterface $entityManager): Response
     {
         $datas = $entityManager->getRepository(Departements::class)->findAll(array("created_at" => "DESC"));
@@ -54,7 +54,7 @@ class DepartementsController extends AbstractController
     #[Route('/departement/create', name: 'api_create_departements', methods: ['POST'])]
     public function createUser(Request $request): Response
     {
-        //dd($request);
+
         try {
             $data = json_decode($request->getContent(), true);
             //dd($data);

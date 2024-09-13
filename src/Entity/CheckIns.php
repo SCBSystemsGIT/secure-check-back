@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Repository\CheckInsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Table;
 
 #[ORM\Entity(repositoryClass: CheckInsRepository::class)]
+#[Table('check_ins')]
 class CheckIns
 {
     #[ORM\Id]

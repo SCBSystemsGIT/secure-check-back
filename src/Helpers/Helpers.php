@@ -4,9 +4,21 @@ namespace App\Helpers;
 
 use Symfony\Component\HttpFoundation\Response;
 #use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Writer\PngWriter;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class Helpers
 {
+    private $mailer;
+
+    public function __construct(private FileUploader $fileUploader, MailerInterface $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
     public function formatDate(\DateTimeInterface $date): string
     {
         return $date->format('Y-m-d');
@@ -153,4 +165,112 @@ class Helpers
         return isDigits($telephone, $minDigits, $maxDigits);
     }
 
+    /**
+     * Déchiffre les données chiffrées
+     *
+     * @param string $encryptedDataWithIv Les données chiffrées avec l'IV
+     * @param string $encryptionKey La clé secrète utilisée pour le chiffrement
+     * @return string|null Les données déchiffrées ou null en cas d'erreur
+     */
+    public function decryptData($encryptedDataWithIv, $encryptionKey = 'secure')
+    {
+        try {
+            // Décoder les données chiffrées de base64
+            $encryptedDataWithIv = base64_decode($encryptedDataWithIv);
+
+            // Séparer les données chiffrées et l'IV
+            list($encryptedData, $iv) = explode('::', $encryptedDataWithIv, 2);
+
+            // Méthode de chiffrement utilisée (doit être la même que pour le chiffrement)
+            $cipherMethod = 'AES-256-CBC';
+
+            // Déchiffrement
+            $decryptedData = openssl_decrypt($encryptedData, $cipherMethod, $encryptionKey, 0, $iv);
+
+            if ($decryptedData === false) {
+                throw new \Exception('Decryption failed.');
+            }
+
+            return $decryptedData;
+        } catch (\Exception $e) {
+            // Gestion des erreurs
+            throw new \Exception('Decryption error: ' . $e->getMessage());
+        }
+    }
+
+
+    public function generateEncrypt($visitorId, $uidn, $host_name)
+    {
+        try {
+            // 1. Création de la chaîne de données pour le QR code
+            $data = [
+                'visitor_id' => $visitorId,
+                'uidn' => $uidn,
+                'host' => $host_name,
+            ];
+
+            $url = "http://192.168.1.3:9999/get-qr-data/" . $uidn;
+            // $jsonData = json_encode($data);
+
+            // 2. Chiffrement des données
+            $encryptionKey = 'secure'; // Remplacez par une clé secrète
+            $cipherMethod = 'AES-256-CBC';
+            $ivLength = openssl_cipher_iv_length($cipherMethod);
+            $iv = openssl_random_pseudo_bytes($ivLength);
+
+            // $encryptedData = openssl_encrypt($jsonData, $cipherMethod, $encryptionKey, 0, $iv);
+            // if ($encryptedData === false) {
+            //     throw new \Exception('Encryption failed.');
+            // }
+
+            // $encryptedDataWithIv = base64_encode($encryptedData . '::' . $iv); // Ajout de l'IV à la fin
+
+            // 3. Génération du QR code avec les données chiffrées
+            $qrCode = Builder::create()
+                ->writer(new PngWriter())
+                ->data($url)
+                // ->data($jsonData)
+                // ->data($encryptedDataWithIv)
+                ->encoding(new Encoding('UTF-8'))
+                ->size(300)
+                // ->validateResult(1)
+                ->build();
+
+            // 4. Sauvegarde ou retour de l'image générée
+            // Vous pouvez enregistrer l'image localement ou la renvoyer au client
+            $filePath = 'qrcode/qrcode-' . $uidn . '.png';
+
+            // $this->fileUploader->upload();
+
+            $qrCode->saveToFile($filePath);
+
+            return $filePath;
+        } catch (\Exception $e) {
+            // Gestion des erreurs
+            throw new \Exception('QR code generation failed: ' . $e->getMessage());
+        }
+    }
+
+
+    public function sendEmail($to, $subject, $body)
+    {
+        // Valider l'adresse e-mail
+        if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException('Invalid email address.');
+        }
+
+        // Envoyer l'email avec l'adresse correcte
+        $email = (new Email())
+            ->from('noreply@scb.com')
+            ->to($to)
+            ->subject($subject)
+            ->text($body);
+
+        try {
+            $this->mailer->send($email);
+            // return new JsonResponse(['status' => 'success', 'message' => 'Email sent successfully']);
+        } catch (\Exception $e) {
+            // return new JsonResponse(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
 }

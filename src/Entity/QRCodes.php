@@ -46,6 +46,9 @@ class QRCodes
     #[ORM\OneToMany(targetEntity: CheckIns::class, mappedBy: 'qr_code')]
     private Collection $checkIns;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isUsed = null;
+
     public function __construct()
     {
         $this->checkIns = new ArrayCollection();
@@ -178,6 +181,18 @@ class QRCodes
                 $checkIn->setQrCode(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isUsed(): ?bool
+    {
+        return $this->isUsed;
+    }
+
+    public function setUsed(?bool $isUsed): static
+    {
+        $this->isUsed = $isUsed;
 
         return $this;
     }

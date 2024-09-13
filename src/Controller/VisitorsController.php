@@ -29,14 +29,13 @@ class VisitorsController extends AbstractController
     private $userRepository;
 
     public function __construct(
-        EntityManagerInterface $entityManager, 
-        SerializerInterface $serializer, 
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer,
         ValidatorInterface $validator,
         Helpers $Helpers,
         VisitorsRepository $visitorsRepository,
         UserRepository $userRepository
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->serializer = $serializer;
         $this->validator = $validator;
@@ -46,26 +45,25 @@ class VisitorsController extends AbstractController
     }
 
     /**
-    * @return Response
-    **/
+     * @return Response
+     **/
     #[Route('/visitors/list', name: 'app_visitors', methods: ['GET'])]
     public function visitorsList(EntityManagerInterface $entityManager): Response
     {
         $datas = $entityManager->getRepository(Visitors::class)->findAll(array("created_at" => "DESC"));
         return $this->json($datas, 200, [], [
             'groups' => 'visitor'
-        ]) ;
+        ]);
     }
 
     /**  
-    * Enregistrement d'un visiteur
-    * @param Request $request
-    * @return JsonResponse
-    */
-    #[Route('/visitor/create', name: 'create_visitor', methods: ['POST'])]
+     * Enregistrement d'un visiteur
+     * @param Request $request
+     * @return JsonResponse
+     */
+    #[Route('/api/visitor/create', name: 'create_visitor', methods: ['POST'])]
     public function createVisitor(Request $request): JsonResponse
     {
-         //dd($request);
         try {
             $data = json_decode($request->getContent(), true);
             if ($data === null) {
@@ -80,12 +78,12 @@ class VisitorsController extends AbstractController
             if (!empty($missingFields)) {
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
-            
+
             $user = $this->userRepository->find($data['user_id']);
             #$user = $this->entityManager->getRepository(User::class)->find($data['user_id']);
             if (!$user) {
                 return new JsonResponse([
-                    'status' => 'error', 
+                    'status' => 'error',
                     'message' => 'User not found'
                 ], Response::HTTP_NOT_FOUND);
             }
@@ -97,6 +95,9 @@ class VisitorsController extends AbstractController
             $visitor->setEmail($data['email']);
             $visitor->setContact($data['contact']);
             $visitor->setAddress($data['address']);
+            $visitor->setOrganisationName($data['organisation_name']);
+            $visitor->setVisitorType((int) $data['visitor_type']);
+            $visitor->setIdNumber($data['id_number']);
             $visitor->setCreatedAt(new \DateTimeImmutable());
             $visitor->setUpdatedAt(new \DateTimeImmutable());
 
@@ -116,10 +117,13 @@ class VisitorsController extends AbstractController
             }
 
             return new JsonResponse([
-                'status' => 'success', 
-                'message' => 'Visitor created successfully'
+                'status' => 'success',
+                'message' => 'Visitor created successfully',
+                'data' => [
+                    "contact" => $visitor->getContact(),
+                    "visitor_id" => $visitor->getId(),
+                ]
             ], Response::HTTP_CREATED);
-
         } catch (\InvalidArgumentException $e) {
             return $this->json([
                 'status' => 'error',

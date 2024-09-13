@@ -67,6 +67,15 @@ class Visitors
     #[ORM\OneToMany(targetEntity: CheckIns::class, mappedBy: 'visitor')]
     private Collection $checkIns;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $organisationName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $idNumber = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $visitor_type = null;
+
     public function __construct()
     {
         $this->requests = new ArrayCollection();
@@ -261,6 +270,42 @@ class Visitors
                 $checkIn->setVisitor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOrganisationName(): ?string
+    {
+        return $this->organisationName;
+    }
+
+    public function setOrganisationName(?string $organisationName): static
+    {
+        $this->organisationName = $organisationName;
+
+        return $this;
+    }
+
+    public function getIdNumber(): ?string
+    {
+        return $this->idNumber;
+    }
+
+    public function setIdNumber(string $idNumber): static
+    {
+        $this->idNumber = $idNumber;
+
+        return $this;
+    }
+
+    public function getVisitorType(): ?int
+    {
+        return $this->visitor_type;
+    }
+
+    public function setVisitorType(?int $visitor_type): static
+    {
+        $this->visitor_type = $visitor_type;
 
         return $this;
     }

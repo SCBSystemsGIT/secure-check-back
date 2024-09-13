@@ -42,7 +42,7 @@ class Requests
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['request'])]
-    private ?\DateTimeImmutable $response_date = null;
+    private ?\DateTime $response_date = null;
 
     #[ORM\Column]
     #[Groups(['request'])]
@@ -122,19 +122,19 @@ class Requests
         return $this->request_date;
     }
 
-    public function setRequestDate(\DateTimeImmutable $request_date): static
+    public function setRequestDate(\DateTime $request_date): static
     {
         $this->request_date = $request_date;
 
         return $this;
     }
 
-    public function getResponseDate(): ?\DateTimeImmutable
+    public function getResponseDate(): ?\DateTime
     {
         return $this->response_date;
     }
 
-    public function setResponseDate(?\DateTimeImmutable $response_date): static
+    public function setResponseDate(?\DateTime $response_date): static
     {
         $this->response_date = $response_date;
 

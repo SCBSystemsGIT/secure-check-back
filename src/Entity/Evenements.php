@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\EvenementsRepository;
@@ -9,10 +8,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: EvenementsRepository::class)]
-#[UniqueEntity(
-    fields: ['name', 'departement', 'date_event'], 
-    message: 'There is already an event with this name, department, and creation date.'
-)]
+#[UniqueEntity(fields: ['name', 'departement', 'date_event'],message: 'There is already an event with this name, department, and creation date.')]
 class Evenements
 {
     #[ORM\Id]

@@ -30,15 +30,15 @@ class RequestsController extends AbstractController
     private $requestRepository;
 
     public function __construct(
-        EntityManagerInterface $entityManager, 
-        SerializerInterface $serializer, 
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer,
         ValidatorInterface $validator,
         Helpers $Helpers,
         VisitorsRepository $visitorsRepository,
         UserRepository $userRepository,
-        RequestsRepository $requestRepository
-    )
-    {
+        RequestsRepository $requestRepository,
+        private Helpers $helpers
+    ) {
         $this->entityManager = $entityManager;
         $this->serializer = $serializer;
         $this->validator = $validator;
@@ -48,27 +48,28 @@ class RequestsController extends AbstractController
         $this->requestRepository = $requestRepository;
     }
     /**
-    * @return Response
-    **/
+     * @return Response
+     **/
     #[Route('/requests/list', name: 'app_requests', methods: ['GET'])]
     public function visitorsList(EntityManagerInterface $entityManager): Response
     {
         $datas = $entityManager->getRepository(Requests::class)->findAll(array("created_at" => "DESC"));
         return $this->json($datas, 200, [], [
             'groups' => 'request_list'
-        ]) ;
+        ]);
     }
 
     /**  
-    * Enregistrement d'une demande de visite
-    * @param Request $request
-    * @return JsonResponse
-    */
-    #[Route('/requests/create', name: 'create_request', methods: ['POST'])]
+     * Enregistrement d'une demande de visite
+     * @param Request $request
+     * @return JsonResponse
+     */
+    #[Route('/api/requests/create', name: 'create_request', methods: ['POST'])]
     public function createRequest(Request $request): JsonResponse
     {
-        //dd($request);
+
         try {
+
             $data = json_decode($request->getContent(), true);
             if ($data === null) {
                 throw new \InvalidArgumentException('Invalid JSON data');
@@ -82,7 +83,7 @@ class RequestsController extends AbstractController
             if (!empty($missingFields)) {
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
-            
+
             $user = null;
             if (!empty($data['user_id'])) {
                 $user = $this->userRepository->find($data['user_id']);
@@ -93,7 +94,7 @@ class RequestsController extends AbstractController
                     ], Response::HTTP_NOT_FOUND);
                 }
             }
-            
+
             $visiteur = null;
             if (!empty($data['visitor_id'])) {
                 $visiteur = $this->visitorsRepository->find($data['visitor_id']);
@@ -117,9 +118,9 @@ class RequestsController extends AbstractController
             $request_datas->setUser($user);
             $request_datas->setVisitor($visiteur);
             $request_datas->setHost($data['host']);
-            $request_datas->setRequestDate(new \DateTimeImmutable());
+            $request_datas->setRequestDate(new \DateTime());
             $request_datas->setCreatedAt(new \DateTimeImmutable());
-            
+
             // Save the visitor entity
             $this->entityManager->persist($request_datas);
             $this->entityManager->flush();
@@ -131,15 +132,17 @@ class RequestsController extends AbstractController
 
                 return $this->json([
                     'status' => 'error',
-                    'message' => $errorsString
+                    'message' => $errorsString,
                 ], Response::HTTP_BAD_REQUEST);
             }
 
             return new JsonResponse([
-                'status' => 'success', 
-                'message' => 'Request submitted successfully'
+                'status' => 'success',
+                'message' => 'Request submitted successfully',
+                'data' => [
+                    "id" => $request_datas->getId()
+                ]
             ], Response::HTTP_CREATED);
-
         } catch (\InvalidArgumentException $e) {
             return $this->json([
                 'status' => 'error',
@@ -156,52 +159,71 @@ class RequestsController extends AbstractController
         }
     }
 
-    #[Route('/requests/update/{id}', name: 'update_request', methods: ['PUT'])]
+    #[Route('/api/requests/update/{id}', name: 'update_request', methods: ['PUT'])]
     public function updaterequest(Request $request, $id): JsonResponse
     {
-        try {
-            $data = json_decode($request->getContent(), true);
 
+        try {
+
+            $data = json_decode($request->getContent(), true);
             $request_datas = $this->requestRepository->find($id);
+
             if (!$request_datas) {
                 return new JsonResponse([
-                    'status' => 'error', 
+                    'status' => 'error',
                     'message' => 'Request not found'
                 ], Response::HTTP_NOT_FOUND);
             }
 
             // Update requests details
-            $request_datas->setResponseDate(new \DateTimeImmutable());
+            $request_datas->setResponseDate(new \DateTime());
             $request_datas->setUpdatedAt(new \DateTimeImmutable());
             $request_datas->setStatus(1);
             $request_datas->setConfirmed(1);
 
-            //dd($request_datas);
 
+            $uidn = uniqid();
             // QR Code generation
-            /*$qrCode = new QRCodes();
-            $qrCode->setVisitor($request_datas->getVisitor()); // Assuming you have a visitor relation
-            $qrCode->setCode($this->qrCodeService->generate()); // Assuming qrCodeService generates a QR code string
-            $qrCode->setUidn(uniqid()); // Example unique identifier generation
+            $qrCode = new QRCodes();
+            $qrCode->setVisitor($request_datas->getVisitor());
+
+            // dd($request_datas->getVisitor()->getId());
+            // Assuming you have a visitor relation
+            $qrCode->setCode(
+                $this->helpers->generateEncrypt(
+                    $request_datas->getVisitor()->getId(),
+                    $uidn,
+                    $request_datas->getHost()
+                )
+            ); // Assuming qrCodeService generates a QR code string
+            $qrCode->setUidn($uidn); // Example unique identifier generation
             $qrCode->setType('Temporaire'); // Or 'Permanent' based on logic
             $qrCode->setExpirationDate(new \DateTime('+1 day')); // Set expiration date if applicable
-            $qrCode->setStatus('Active');
+            $qrCode->setStatus(1);
             $qrCode->setCreatedAt(new \DateTimeImmutable());
-            $qrCode->setUpdatedAt(new \DateTimeImmutable());*/
+            $qrCode->setUpdatedAt(new \DateTimeImmutable());
 
             // Save updated visitor entity
             $this->entityManager->persist($request_datas);
-            //$this->entityManager->persist($qrCode);
+            $this->entityManager->persist($qrCode);
             $this->entityManager->flush();
 
-            return new JsonResponse([
-                'status' => 'success', 
-                'message' => 'Request and QR code updated successfully'
-            ], Response::HTTP_OK);
+            $this->helpers->sendEmail(
+                $request_datas->getVisitor()->getEmail(),
+                "Secure Check - QRCode",
+                "Votre QRcode"
+            );
 
+            return new JsonResponse([
+                'status' => 'success',
+                'message' => 'Request and QR code updated successfully',
+                'data' => [
+                    "uidn" => $uidn
+                ]
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return new JsonResponse([
-                'status' => 'error', 
+                'status' => 'error',
                 'message' => 'An error occurred: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

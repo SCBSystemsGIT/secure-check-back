@@ -24,13 +24,12 @@ class UserController extends AbstractController
     private $Helpers;
 
     public function __construct(
-        EntityManagerInterface $entityManager, 
-        UserPasswordHasherInterface $passwordHasher, 
-        SerializerInterface $serializer, 
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher,
+        SerializerInterface $serializer,
         ValidatorInterface $validator,
         Helpers $Helpers,
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->passwordHasher = $passwordHasher;
         $this->serializer = $serializer;
@@ -39,28 +38,29 @@ class UserController extends AbstractController
     }
 
     /**
-    * @return Response
-    **/
+     * @return Response
+     **/
     #[Route('/user/list', name: 'app_user', methods: ['GET'])]
     public function userList(EntityManagerInterface $entityManager): Response
     {
         $datas = $entityManager->getRepository(User::class)->findAll(array("create_at" => "DESC"));
         return $this->json($datas, 200, [], [
             'groups' => 'users'
-        ]) ;
+        ]);
     }
 
     /**  
-    * Enregistrement d'un utilisateur
-    * @param Request $request
-    * @return JsonResponse
-    */
+     * Enregistrement d'un utilisateur
+     * @param Request $request
+     * @return JsonResponse
+     */
 
-    #[Route('/user/create', name: 'api_create_user', methods: ['POST'])]
+    #[Route('/api/user/create', name: 'api_create_user', methods: ['POST'])]
     public function createUser(Request $request): Response
     {
         //dd($request);
         try {
+
             $data = json_decode($request->getContent(), true);
             //dd($data);
             if ($data === null) {
@@ -76,19 +76,24 @@ class UserController extends AbstractController
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
 
+
             // Récupérer le département
-            $department = $this->entityManager->getRepository(Departements::class)->findOneBy(["name"=>$data["department_id"]]);
+            $department = $this->entityManager
+                ->getRepository(Departements::class)
+                ->find($data["department_id"]);
+            // ->findOneBy(["name"=>$data["department_id"]]);
             if (!$department) {
                 throw new \InvalidArgumentException('Invalid department_id');
             }
-        
+
+
             $user = new User();
             $user->setName($data["name"]);
             $user->setFirstname($data["firstname"]);
             $user->setEmail($data['email']);
             $user->setContact($data['contact']);
             $user->setTitle($data['title']);
-            $user->setRole($data['role'] ?? ['ROLE_USER']);
+            $user->setRole(["role" => $data['role']] ?? ['ROLE_USER']);
             $user->setDepartment($department);
             $user->setPassword(
                 $this->passwordHasher->hashPassword(
@@ -118,8 +123,6 @@ class UserController extends AbstractController
                 'status' => 'success',
                 'message' => 'User created successfully'
             ], Response::HTTP_CREATED);
-
-
         } catch (\InvalidArgumentException $e) {
             return $this->json([
                 'status' => 'error',
