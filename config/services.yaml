@@ -173,3 +173,15 @@ services:
                   event: lexik_jwt_authentication.on_jwt_invalid,
                   method: onJWTInvalid,
               }
+monolog:
+    channels: ['mailer']
+    handlers:
+        main:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            level: debug
+        mailer:
+            type: stream
+            path: '%kernel.logs_dir%/mailer_%kernel.environment%.log'
+            level: debug
+            channels: ['mailer']

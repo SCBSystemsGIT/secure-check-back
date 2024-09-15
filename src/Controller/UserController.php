@@ -76,7 +76,6 @@ class UserController extends AbstractController
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
 
-
             // Récupérer le département
             $department = $this->entityManager
                 ->getRepository(Departements::class)
@@ -93,7 +92,7 @@ class UserController extends AbstractController
             $user->setEmail($data['email']);
             $user->setContact($data['contact']);
             $user->setTitle($data['title']);
-            $user->setRole(["role" => $data['role']] ?? ['ROLE_USER']);
+            $user->setRole([$data['role']] ?? ['ROLE_USER']);
             $user->setDepartment($department);
             $user->setPassword(
                 $this->passwordHasher->hashPassword(

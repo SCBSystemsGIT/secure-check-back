@@ -7,14 +7,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\Writer\PngWriter;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mailer\MailerInterface;
+// use App\Message\SendEmailMessage;
+use Symfony\Component\Mailer\Messenger\SendEmailMessage;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Messenger\MessageBusInterface;
+
 
 class Helpers
 {
     private $mailer;
 
-    public function __construct(private FileUploader $fileUploader, MailerInterface $mailer)
+    public function __construct(private FileUploader $fileUploader, MailerInterface $mailer, private MessageBusInterface $bus)
     {
         $this->mailer = $mailer;
     }
@@ -251,8 +256,10 @@ class Helpers
         }
     }
 
-
-    public function sendEmail($to, $subject, $body)
+    public function sendEmail(
+        $to, $subject, $body, $data
+        
+        )
     {
         // Valider l'adresse e-mail
         if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
@@ -260,17 +267,23 @@ class Helpers
         }
 
         // Envoyer l'email avec l'adresse correcte
+        $uidn = $data['uidn'];
         $email = (new Email())
             ->from('noreply@scb.com')
             ->to($to)
             ->subject($subject)
-            ->text($body);
+            ->html($body);
+
+            //->attachFromPath("http://192.168.1.3:9999/qrcode/qrcode-$uidn.png", 'qrc-code', 'image/png');
+
+            $message = new SendEmailMessage($email);
+            $this->bus->dispatch($message);
 
         try {
             $this->mailer->send($email);
-            // return new JsonResponse(['status' => 'success', 'message' => 'Email sent successfully']);
+            return new JsonResponse(['status' => 'success', 'message' => 'Email sent successfully']);
         } catch (\Exception $e) {
-            // return new JsonResponse(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+            return new JsonResponse(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
 }

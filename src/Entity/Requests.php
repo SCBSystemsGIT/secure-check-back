@@ -117,7 +117,7 @@ class Requests
         return $this;
     }
 
-    public function getRequestDate(): ?\DateTimeImmutable
+    public function getRequestDate(): ?\DateTime
     {
         return $this->request_date;
     }

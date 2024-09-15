@@ -37,7 +37,6 @@ class GetQrCodeResultController extends AbstractController
         }
 
         $currentDateTime = new DateTime();
-
         if ($currentDateTime > $qr->getExpirationDate()) {
             return $this->json(
                 [
@@ -60,7 +59,6 @@ class GetQrCodeResultController extends AbstractController
                 Response::HTTP_OK
             );
         }
-
         $this->saveCheckIn($qr);
 
         return $this->json(

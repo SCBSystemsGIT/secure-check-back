@@ -50,12 +50,12 @@ class RequestsController extends AbstractController
     /**
      * @return Response
      **/
-    #[Route('/requests/list', name: 'app_requests', methods: ['GET'])]
+    #[Route('/api/requests/list', name: 'app_requests', methods: ['GET'])]
     public function visitorsList(EntityManagerInterface $entityManager): Response
     {
         $datas = $entityManager->getRepository(Requests::class)->findAll(array("created_at" => "DESC"));
         return $this->json($datas, 200, [], [
-            'groups' => 'request_list'
+            'groups' => 'request'
         ]);
     }
 
@@ -68,6 +68,7 @@ class RequestsController extends AbstractController
     public function createRequest(Request $request): JsonResponse
     {
 
+        //dd(json_decode($request->getContent(),true));
         try {
 
             $data = json_decode($request->getContent(), true);
@@ -181,12 +182,10 @@ class RequestsController extends AbstractController
             $request_datas->setStatus(1);
             $request_datas->setConfirmed(1);
 
-
             $uidn = uniqid();
             // QR Code generation
             $qrCode = new QRCodes();
             $qrCode->setVisitor($request_datas->getVisitor());
-
             // dd($request_datas->getVisitor()->getId());
             // Assuming you have a visitor relation
             $qrCode->setCode(
@@ -208,10 +207,27 @@ class RequestsController extends AbstractController
             $this->entityManager->persist($qrCode);
             $this->entityManager->flush();
 
+            $dataEmail = [
+                "uidn" => $uidn
+            ];
+
+
+            $qrCodeUrl = "http://192.168.1.3:9999/qrcode/qrcode-$uidn.png";
+            
             $this->helpers->sendEmail(
                 $request_datas->getVisitor()->getEmail(),
                 "Secure Check - QRCode",
-                "Votre QRcode"
+                "
+                <html>
+                    <body>
+                        <p>Bonjour,</p>
+                        <p>Veuillez trouver ci-dessous votre QR code :</p>
+                        <p><img src=\"$qrCodeUrl\" alt=\"QR Code\" /></p>
+                        <p><a href=\"$qrCodeUrl\"> QR Code </a> </p>
+                        <p>Merci et bonne journée !</p>
+                    </body>
+                </html>",
+                $dataEmail
             );
 
             return new JsonResponse([
