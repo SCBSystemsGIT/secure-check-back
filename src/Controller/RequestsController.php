@@ -222,8 +222,8 @@ class RequestsController extends AbstractController
                     <body>
                         <p>Bonjour,</p>
                         <p>Veuillez trouver ci-dessous votre QR code :</p>
-                        <p><img src=\"$qrCodeUrl\" alt=\"QR Code\" /></p>
                         <p><a href=\"$qrCodeUrl\"> QR Code </a> </p>
+                        <p> Votre UIDN : $uidn</p>
                         <p>Merci et bonne journée !</p>
                     </body>
                 </html>",
