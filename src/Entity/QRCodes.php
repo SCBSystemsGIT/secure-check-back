@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: QRCodesRepository::class)]
 class QRCodes
@@ -23,6 +24,7 @@ class QRCodes
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(groups: ['request'])]
     private ?string $uidn = null;
 
     #[ORM\Column(length: 255)]

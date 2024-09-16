@@ -71,7 +71,7 @@ class VisitorsController extends AbstractController
             }
 
             // Define required fields
-            $requiredFields = ['user_id', 'firstname', 'lastname', 'email', 'contact', 'address'];
+            $requiredFields = ['firstname', 'lastname', 'email', 'contact', 'address'];
 
             // Validate required fields using the helper function
             $missingFields = $this->Helpers->validateRequiredFields($data, $requiredFields);
@@ -79,17 +79,20 @@ class VisitorsController extends AbstractController
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
 
-            $user = $this->userRepository->find($data['user_id']);
-            #$user = $this->entityManager->getRepository(User::class)->find($data['user_id']);
-            if (!$user) {
-                return new JsonResponse([
-                    'status' => 'error',
-                    'message' => 'User not found'
-                ], Response::HTTP_NOT_FOUND);
-            }
+            if(isset($data['user_id'])){
+                $user = $this->userRepository->find($data['user_id']);
 
+                if (!$user) {
+                    return new JsonResponse([
+                        'status' => 'error',
+                        'message' => 'User not found'
+                    ], Response::HTTP_NOT_FOUND);
+                }
+            }
+            #$user = $this->entityManager->getRepository(User::class)->find($data['user_id']);
+           
             $visitor = new Visitors();
-            $visitor->setUser($user);
+            $visitor->setUser($user ?? null);
             $visitor->setFirstname($data['firstname']);
             $visitor->setLastname($data['lastname']);
             $visitor->setEmail($data['email']);

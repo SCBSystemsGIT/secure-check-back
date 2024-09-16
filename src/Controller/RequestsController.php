@@ -88,6 +88,8 @@ class RequestsController extends AbstractController
             $user = null;
             if (!empty($data['user_id'])) {
                 $user = $this->userRepository->find($data['user_id']);
+
+                // /dd($user);
                 if (!$user) {
                     return new JsonResponse([
                         'status' => 'error',
@@ -112,6 +114,7 @@ class RequestsController extends AbstractController
             if ($user) {
                 $request_datas->setUser($user);
             }
+
             if ($visiteur) {
                 $request_datas->setVisitor($visiteur);
             }
@@ -136,6 +139,8 @@ class RequestsController extends AbstractController
                     'message' => $errorsString,
                 ], Response::HTTP_BAD_REQUEST);
             }
+
+            // dd($user ?? "OK");
 
             return new JsonResponse([
                 'status' => 'success',

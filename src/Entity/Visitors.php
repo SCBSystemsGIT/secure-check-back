@@ -65,6 +65,7 @@ class Visitors
      * @var Collection<int, CheckIns>
      */
     #[ORM\OneToMany(targetEntity: CheckIns::class, mappedBy: 'visitor')]
+    #[Groups(['request'])]
     private Collection $checkIns;
 
     #[ORM\Column(length: 255, nullable: true)]

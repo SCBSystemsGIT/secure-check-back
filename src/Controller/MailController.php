@@ -19,9 +19,7 @@ class MailController extends AbstractController
             ->to('recipient@example.com')
             ->subject('Secure Check - QRCode')
             ->text('Votre QRcode')
-            ->html('<p> Cher client votre QR est en PJ</p>')
-            ->attachFromPath('/qr-c', 'image.jpg', 'image/png'); // Add the image as attachment
-            ;
+            ->html('<p> Cher client votre QR est en PJ</p>');
 
         try {
             $mailer->send($email);

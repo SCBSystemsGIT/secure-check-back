@@ -6,6 +6,7 @@ use App\Repository\CheckInsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CheckInsRepository::class)]
 #[Table('check_ins')]
@@ -20,12 +21,15 @@ class CheckIns
     private ?Visitors $visitor = null;
 
     #[ORM\ManyToOne(inversedBy: 'checkIns')]
+    #[Groups(groups: ['request'])]
     private ?QRCodes $qr_code = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(groups: ['request'])]
     private ?\DateTimeInterface $check_in_time = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(groups: ['request'])]
     private ?\DateTimeInterface $check_out_time = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
