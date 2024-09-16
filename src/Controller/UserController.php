@@ -40,7 +40,7 @@ class UserController extends AbstractController
     /**
      * @return Response
      **/
-    #[Route('/user/list', name: 'app_user', methods: ['GET'])]
+    #[Route('/api/user/list', name: 'app_user', methods: ['GET'])]
     public function userList(EntityManagerInterface $entityManager): Response
     {
         $datas = $entityManager->getRepository(User::class)->findAll(array("create_at" => "DESC"));

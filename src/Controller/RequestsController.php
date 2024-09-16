@@ -211,7 +211,6 @@ class RequestsController extends AbstractController
                 "uidn" => $uidn
             ];
 
-
             $qrCodeUrl = "http://192.168.1.3:9999/qrcode/qrcode-$uidn.png";
             
             $this->helpers->sendEmail(
