@@ -214,8 +214,8 @@ class Helpers
                 'host' => $host_name,
             ];
 
-            $url = "http://192.168.1.3:9999/get-qr-data/" . $uidn;
-            // $jsonData = json_encode($data);
+            // $url = "http://192.168.1.3:9999/get-qr-data/" . $uidn;
+            $jsonData = json_encode($data);
 
             // 2. Chiffrement des données
             $encryptionKey = 'secure'; // Remplacez par une clé secrète
@@ -223,19 +223,19 @@ class Helpers
             $ivLength = openssl_cipher_iv_length($cipherMethod);
             $iv = openssl_random_pseudo_bytes($ivLength);
 
-            // $encryptedData = openssl_encrypt($jsonData, $cipherMethod, $encryptionKey, 0, $iv);
-            // if ($encryptedData === false) {
-            //     throw new \Exception('Encryption failed.');
-            // }
+            $encryptedData = openssl_encrypt($jsonData, $cipherMethod, $encryptionKey, 0, $iv);
+            if ($encryptedData === false) {
+                throw new \Exception('Encryption failed.');
+            }
 
-            // $encryptedDataWithIv = base64_encode($encryptedData . '::' . $iv); // Ajout de l'IV à la fin
+            $encryptedDataWithIv = base64_encode($encryptedData . '::' . $iv); // Ajout de l'IV à la fin
 
             // 3. Génération du QR code avec les données chiffrées
             $qrCode = Builder::create()
                 ->writer(new PngWriter())
-                ->data($url)
+                // ->data($url)
                 // ->data($jsonData)
-                // ->data($encryptedDataWithIv)
+                ->data($encryptedDataWithIv)
                 ->encoding(new Encoding('UTF-8'))
                 ->size(300)
                 // ->validateResult(1)
@@ -248,8 +248,8 @@ class Helpers
             // $this->fileUploader->upload();
 
             $qrCode->saveToFile($filePath);
-
             return $filePath;
+
         } catch (\Exception $e) {
             // Gestion des erreurs
             throw new \Exception('QR code generation failed: ' . $e->getMessage());

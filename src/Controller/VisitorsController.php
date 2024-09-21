@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Evenements;
 use App\Entity\Visitors;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -79,7 +80,7 @@ class VisitorsController extends AbstractController
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
 
-            if(isset($data['user_id'])){
+            if (isset($data['user_id'])) {
                 $user = $this->userRepository->find($data['user_id']);
 
                 if (!$user) {
@@ -89,9 +90,13 @@ class VisitorsController extends AbstractController
                     ], Response::HTTP_NOT_FOUND);
                 }
             }
-            #$user = $this->entityManager->getRepository(User::class)->find($data['user_id']);
-           
+
+
             $visitor = new Visitors();
+            if (isset($data["evenements_id"])) {
+                $event = $this->entityManager->getRepository(Evenements::class)->find($data['evenements_id']);
+                $visitor->setEvenements($event);
+            }
             $visitor->setUser($user ?? null);
             $visitor->setFirstname($data['firstname']);
             $visitor->setLastname($data['lastname']);

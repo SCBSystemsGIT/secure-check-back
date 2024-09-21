@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    domain_name: "%env(DOMAIN_NAME)%"
+    domain_front: "%env(DOMAIN_FRONT)%"
     gtp.base_uri: "%env(GTP_BASE_URI)%"
     gtp.program_id: "%env(GTP_PROGRAM_ID)%"
     gtp.program_id_virtual: "%env(GTP_PROGRAM_ID_VIRTUAL)%"

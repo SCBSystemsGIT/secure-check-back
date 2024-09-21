@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
 use App\Entity\Departements;
 use App\Entity\Evenements;
+use App\Repository\EvenementsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +14,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Helpers\Helpers;
+use App\Repository\CompanyRepository;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class EvenementsController extends AbstractController
 {
@@ -22,22 +26,24 @@ class EvenementsController extends AbstractController
     private $Helpers;
 
     public function __construct(
-        EntityManagerInterface $entityManager, 
-        SerializerInterface $serializer, 
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer,
         ValidatorInterface $validator,
         Helpers $Helpers,
-    )
-    {
+        private CompanyRepository $companyRepository,
+        private EvenementsRepository $eventRepo,
+        private SluggerInterface $slugger
+    ) {
         $this->entityManager = $entityManager;
         $this->serializer = $serializer;
         $this->validator = $validator;
         $this->Helpers = $Helpers;
     }
-    
+
     /**
-    * @return Response
-    **/
-    #[Route('/evenement/list', name: 'app_evenements', methods: ['GET'])]
+     * @return Response
+     **/
+    #[Route('/api/evenement/list', name: 'app_evenements', methods: ['GET'])]
     public function departmentList(EntityManagerInterface $entityManager): Response
     {
         #$datas = $entityManager->getRepository(Evenements::class)->findAll(array("date_event" => "DESC"));
@@ -45,28 +51,26 @@ class EvenementsController extends AbstractController
 
         return $this->json($datas, 200, [], [
             'groups' => 'evenements'
-        ]) ;
+        ]);
     }
 
     /**  
-    * Enregistrement d'un Evènement
-    * @param Request $request
-    * @return JsonResponse
-    */
+     * Enregistrement d'un Evènement
+     * @param Request $request
+     * @return JsonResponse
+     */
 
-    #[Route('/evenement/create', name: 'api_create_evenements', methods: ['POST'])]
+    #[Route('/api/evenement/create', name: 'api_create_evenements', methods: ['POST'])]
     public function createUser(Request $request): Response
     {
-        //dd($request);
         try {
             $data = json_decode($request->getContent(), true);
-            //dd($data);
             if ($data === null) {
                 throw new \InvalidArgumentException('Invalid JSON data');
             }
 
             // Define required fields
-            $requiredFields = ['name', 'location', 'departement_id', 'date_event', 'time_event'];
+            $requiredFields = ['name', 'company_id', 'location', 'departement_id', 'date_event', 'time_event'];
 
             // Validate required fields using the helper function
             $missingFields = $this->Helpers->validateRequiredFields($data, $requiredFields);
@@ -75,12 +79,13 @@ class EvenementsController extends AbstractController
             }
 
             // Récupérer le département
-            $department = $this->entityManager->getRepository(Departements::class)->findOneBy(["name"=>$data["departement_id"]]);
+            $department = $this->entityManager->getRepository(Departements::class)->find($data["departement_id"]);
             if (!$department) {
                 throw new \InvalidArgumentException('Invalid department_id');
             }
 
             $dateEvent = \DateTime::createFromFormat('d/m/Y', $data['date_event']);
+            $dateEvent = new \DateTime($data['date_event']);
             if (!$dateEvent) {
                 throw new \Exception("Invalid date format");
             }
@@ -90,18 +95,26 @@ class EvenementsController extends AbstractController
                 throw new \Exception("Invalid time format");
             }
 
-            $user = new Evenements();
-            $user->setName($data["name"]);
-            $user->setLocation($data["location"]);
-            $user->setDepartement($department);
-            $user->setDateEvent($dateEvent);
-            $user->setTimeEvent($timeEvent);
-            $user->setCreatedAt(new \DateTimeImmutable());
-            $user->setUpdatedAt(new \DateTimeImmutable());
-            $user->setStatus(1);
+            $company = $this->companyRepository->find($data['company_id']);
+            if (empty($company)) {
+                return $this->json([
+                    "message" => "Entreprise introuvable"
+                ], 404);
+            }
+
+            $event = new Evenements();
+            $event->setName($data["name"])->generateSlug($this->slugger);
+            $event->setCompany($company);
+            $event->setLocation($data["location"]);
+            $event->setDepartement($department);
+            $event->setDateEvent($dateEvent);
+            $event->setTimeEvent($timeEvent);
+            $event->setCreatedAt(new \DateTimeImmutable());
+            $event->setUpdatedAt(new \DateTimeImmutable());
+            $event->setStatus(1);
 
             // Validate the user entity
-            $errors = $this->validator->validate($user);
+            $errors = $this->validator->validate($event);
             if (count($errors) > 0) {
                 $errorsString = (string) $errors;
 
@@ -111,15 +124,25 @@ class EvenementsController extends AbstractController
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            $this->entityManager->persist($user);
+            $this->entityManager->persist($event);
             $this->entityManager->flush();
 
-            return $this->json([
-                'status' => 'success',
-                'message' => 'Event created successfully'
-            ], Response::HTTP_CREATED);
-
-
+            $lien = $this->getParameter('domain_front') . "/company/" . $event->getCompany()->getSlug() . '/event/' . $event->getSlug();
+            return $this->json(
+                [
+                    'status' => 'success',
+                    'data' => [
+                        "lien" => $lien,
+                        "event" => $event
+                    ],
+                    'message' => 'Event created successfully'
+                ],
+                Response::HTTP_CREATED,
+                [],
+                [
+                    "groups" => "evenements"
+                ]
+            );
         } catch (\InvalidArgumentException $e) {
             return $this->json([
                 'status' => 'error',
@@ -134,5 +157,37 @@ class EvenementsController extends AbstractController
                 'message' => 'An error occurred: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+    /**  
+     * Enregistrement d'un Evènement
+     * @param Request $request
+     * @return JsonResponse
+     */
+
+    #[Route('/api/evenement/{slug}', name: 'api_get_evenements', methods: ['GET'])]
+    public function show($slug): Response
+    {
+        $event = $this->eventRepo->findOneBy(["slug" => $slug]);
+
+        if (empty($event)) {
+            return $this->json(
+                [
+                    'status' => Response::HTTP_BAD_REQUEST,
+                    'message' => "Evenement Non Rétrouvé"
+                ],
+                status: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        return $this->json(
+            data: [
+                "data" => $event,
+                'status' => Response::HTTP_OK,
+                'message' => "Evenement Rétrouvé"
+            ],
+            status: Response::HTTP_OK,
+            headers: [],
+            context: ['groups' => "evenements"]
+        );
     }
 }
