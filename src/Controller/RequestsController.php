@@ -53,8 +53,10 @@ class RequestsController extends AbstractController
     #[Route('/api/requests/list', name: 'app_requests', methods: ['GET'])]
     public function visitorsList(EntityManagerInterface $entityManager): Response
     {
-        $datas = $entityManager->getRepository(Requests::class)->findBy([],
-            ["created_at" => "DESC"]);
+        $datas = $entityManager->getRepository(Requests::class)->findBy(
+            [],
+            ["created_at" => "DESC"]
+        );
         return $this->json($datas, 200, [], [
             'groups' => 'request'
         ]);
@@ -217,8 +219,8 @@ class RequestsController extends AbstractController
                 "uidn" => $uidn
             ];
 
-            $qrCodeUrl = "http://192.168.1.3:9999/qrcode/qrcode-$uidn.png";
-            
+            $qrCodeUrl = $this->getParameter('domain_name') . "/qrcode/qrcode-$uidn.png";
+
             $this->helpers->sendEmail(
                 $request_datas->getVisitor()->getEmail(),
                 "Secure Check - QRCode",
