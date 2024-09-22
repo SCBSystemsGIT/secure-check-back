@@ -51,23 +51,30 @@ class GetQrCodeResultController extends AbstractController
         if (sizeof($isAlreadyCheckIn) > 0) {
             $this->updateCheckIn($qr);
 
-            return $this->json(
-                [
-                    'status' => 'success',
-                    'message' => "CheckOut éffectué"
-                ],
-                Response::HTTP_OK
-            );
-        }
-        $this->saveCheckIn($qr);
+            $url = $this->getParameter('domain_front') . '/success-checkout/' . $uidn;
+            return $this->redirect($url);
 
-        return $this->json(
-            [
-                'status' => 'success',
-                'message' => "CheckIn éffectué"
-            ],
-            Response::HTTP_OK
-        );
+            // return $this->json(
+            // [
+            // 'status' => 'success',
+            // 'message' => "CheckOut éffectué"
+            // ],
+            // Response::HTTP_OK
+            // );
+        }
+
+        $this->saveCheckIn($qr);
+        $url = $this->getParameter('domain_front') . '/success-checkin/' . $uidn;
+
+        return $this->redirect($url);
+
+        // return $this->json(
+        //     [
+        //         'status' => 'success',
+        //         'message' => "CheckIn éffectué"
+        //     ],
+        //     Response::HTTP_OK
+        // );
     }
 
     public function saveCheckIn($qr)
