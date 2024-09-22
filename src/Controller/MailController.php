@@ -15,8 +15,9 @@ class MailController extends AbstractController
     {
         // Créez l'email
         $email = (new Email())
-            ->from('your_email@example.com')
-            ->to('recipient@example.com')
+            // ->from('your_email@example.com')
+            ->from('noreply@express54.org')
+            ->to('assidikouattara@gmail.com')
             ->subject('Secure Check - QRCode')
             ->text('Votre QRcode')
             ->html('<p> Cher client votre QR est en PJ</p>');
@@ -27,6 +28,5 @@ class MailController extends AbstractController
         } catch (\Exception $e) {
             return new Response('Failed to send email: ' . $e->getMessage());
         }
-
     }
 }
