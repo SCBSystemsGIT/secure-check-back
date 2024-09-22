@@ -143,8 +143,6 @@ class RequestsController extends AbstractController
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            // dd($user ?? "OK");
-
             return new JsonResponse([
                 'status' => 'success',
                 'message' => 'Request submitted successfully',
