@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 #use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Endroid\QrCode\Builder\Builder;
@@ -15,7 +16,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 
-class Helpers
+class Helpers extends AbstractController
 {
     private $mailer;
 
@@ -213,7 +214,7 @@ class Helpers
                 'host' => $host_name,
             ];
 
-            $url = "http://192.168.1.3:9999/get-qr-data/" . $uidn;
+            $url = $this->getParameter('domain_name') . "/get-qr-data/" . $uidn;
             // $jsonData = json_encode($data);
 
             // 2. Chiffrement des données
@@ -248,7 +249,6 @@ class Helpers
 
             $qrCode->saveToFile($filePath);
             return $filePath;
-
         } catch (\Exception $e) {
             // Gestion des erreurs
             throw new \Exception('QR code generation failed: ' . $e->getMessage());
@@ -256,10 +256,12 @@ class Helpers
     }
 
     public function sendEmail(
-        $to, $subject, $body, $data
-        
-        )
-    {
+        $to,
+        $subject,
+        $body,
+        $data
+
+    ) {
         // Valider l'adresse e-mail
         if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException('Invalid email address.');
@@ -268,15 +270,15 @@ class Helpers
         // Envoyer l'email avec l'adresse correcte
         $uidn = $data['uidn'];
         $email = (new Email())
-            ->from('noreply@scb.com')
+            ->from('noreply@express54.org')
             ->to($to)
             ->subject($subject)
             ->html($body);
 
-            //->attachFromPath("http://192.168.1.3:9999/qrcode/qrcode-$uidn.png", 'qrc-code', 'image/png');
+        //->attachFromPath("http://192.168.1.3:9999/qrcode/qrcode-$uidn.png", 'qrc-code', 'image/png');
 
-            $message = new SendEmailMessage($email);
-            $this->bus->dispatch($message);
+        $message = new SendEmailMessage($email);
+        $this->bus->dispatch($message);
 
         try {
             $this->mailer->send($email);

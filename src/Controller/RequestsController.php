@@ -214,13 +214,11 @@ class RequestsController extends AbstractController
             $this->entityManager->persist($request_datas);
             $this->entityManager->persist($qrCode);
             $this->entityManager->flush();
-
             $dataEmail = [
                 "uidn" => $uidn
             ];
 
             $qrCodeUrl = $this->getParameter('domain_name') . "/qrcode/qrcode-$uidn.png";
-
             $this->helpers->sendEmail(
                 $request_datas->getVisitor()->getEmail(),
                 "Secure Check - QRCode",
