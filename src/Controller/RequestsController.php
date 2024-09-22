@@ -219,6 +219,7 @@ class RequestsController extends AbstractController
             ];
 
             $qrCodeUrl = $this->getParameter('domain_name') . "/qrcode/qrcode-$uidn.png";
+
             $this->helpers->sendEmail(
                 $request_datas->getVisitor()->getEmail(),
                 "Secure Check - QRCode",
