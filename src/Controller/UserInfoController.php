@@ -32,6 +32,7 @@ class UserInfoController extends AbstractController
 
         $token = str_replace('Bearer ', '', $authorizationHeader);
         
+        dd('OK');
         // Décodez le token pour obtenir les informations de l'utilisateur
         try {
             $payload = $this->jwtTokenManager->decode($token);
