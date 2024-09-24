@@ -24,7 +24,7 @@ class UserInfoController extends AbstractController
     #[Route('/api/user/info', name: 'api_user_info', methods: ['GET'])]
     public function getUserInfo(Request $request): JsonResponse
     {
-        dd('OK');
+        // dd('OK');
         // Récupération du token depuis l'en-tête Authorization
         $authorizationHeader = $request->headers->get('Authorization');
         if (null === $authorizationHeader) {
