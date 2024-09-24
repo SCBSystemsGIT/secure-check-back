@@ -24,6 +24,7 @@ class UserInfoController extends AbstractController
     #[Route('/api/user/info', name: 'api_user_info', methods: ['GET'])]
     public function getUserInfo(Request $request): JsonResponse
     {
+        dd('OK');
         // Récupération du token depuis l'en-tête Authorization
         $authorizationHeader = $request->headers->get('Authorization');
         if (null === $authorizationHeader) {
@@ -32,7 +33,6 @@ class UserInfoController extends AbstractController
 
         $token = str_replace('Bearer ', '', $authorizationHeader);
         
-        dd('OK');
         // Décodez le token pour obtenir les informations de l'utilisateur
         try {
             $payload = $this->jwtTokenManager->decode($token);
