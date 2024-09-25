@@ -86,7 +86,7 @@ class CompanyService extends AbstractController
         return $this->json([
             "message" => "Entreprise",
             "data" => $company
-        ], 200);
+        ], 200, [], ['company']);
     }
 
     public function update($data, $company)
