@@ -41,6 +41,7 @@ class Company
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
     private ?string $logo = null;
 
     public function __construct()

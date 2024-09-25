@@ -77,6 +77,7 @@ class CompanyService extends AbstractController
             $company = $this->companyRepository->findOneBy(['slug' => $slug]);
         }
 
+
         if (!$company) {
             return new JsonResponse([
                 'message' => "$this->resourceName introuvable"
@@ -86,7 +87,7 @@ class CompanyService extends AbstractController
         return $this->json([
             "message" => "Entreprise",
             "data" => $company
-        ], 200, [], ['company']);
+        ], 200, [], ['groups' => 'company']);
     }
 
     public function update($data, $company)
