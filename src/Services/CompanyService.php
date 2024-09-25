@@ -23,14 +23,15 @@ class CompanyService extends AbstractController
         EntityManagerInterface $entityManager,
         ValidatorInterface $validator,
         private SluggerInterface $slugger,
-        private CompanyRepository $companyRepository
+        private CompanyRepository $companyRepository,
+        private FileUploader $fileUploader,
 
     ) {
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
 
-    public function add($data)
+    public function add($data, $file)
     {
         $company = new Company();
         $company->setName(name: $data['name'])
@@ -52,6 +53,10 @@ class CompanyService extends AbstractController
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+        // dd($file);
+        $data['logo'] = $this->fileUploader->upload($file, "logo");
+        $company->setLogo($data['logo']);
+
         $this->entityManager->persist($company);
         $this->entityManager->flush();
 
@@ -66,7 +71,11 @@ class CompanyService extends AbstractController
 
     public function show($slug)
     {
-        $company = $this->companyRepository->findOneBy(['slug' => $slug]);
+        if (is_numeric($slug)) {
+            $company = $this->companyRepository->find($slug);
+        } else {
+            $company = $this->companyRepository->findOneBy(['slug' => $slug]);
+        }
 
         if (!$company) {
             return new JsonResponse([

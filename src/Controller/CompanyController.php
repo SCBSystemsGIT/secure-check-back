@@ -13,7 +13,7 @@ class CompanyController extends AbstractController
 {
     private $companyService;
 
-    public function __construct(CompanyService $companyService)
+    public function __construct(CompanyService $companyService,)
     {
         $this->companyService = $companyService;
     }
@@ -22,7 +22,12 @@ class CompanyController extends AbstractController
     public function add(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        return $this->companyService->add($data);
+        if (empty($data)) {
+            $data = $request->request->all();
+        }
+        $file = $request->files->get('logo');
+
+        return $this->companyService->add($data, $file);
     }
 
     #[Route('/api/company/{slug}', name: 'company_show', methods: ['GET'])]

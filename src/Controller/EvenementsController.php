@@ -32,7 +32,7 @@ class EvenementsController extends AbstractController
         Helpers $Helpers,
         private CompanyRepository $companyRepository,
         private EvenementsRepository $eventRepo,
-        private SluggerInterface $slugger
+        private SluggerInterface $slugger,
     ) {
         $this->entityManager = $entityManager;
         $this->serializer = $serializer;
@@ -111,10 +111,11 @@ class EvenementsController extends AbstractController
             $event->setTimeEvent($timeEvent);
             $event->setCreatedAt(new \DateTimeImmutable());
             $event->setUpdatedAt(new \DateTimeImmutable());
-            $event->setStatus(1);
+            $event->setStatus(status: 1);
 
             // Validate the user entity
             $errors = $this->validator->validate($event);
+
             if (count($errors) > 0) {
                 $errorsString = (string) $errors;
 
@@ -128,6 +129,8 @@ class EvenementsController extends AbstractController
             $this->entityManager->flush();
 
             $lien = $this->getParameter('domain_front') . "/company/" . $event->getCompany()->getSlug() . '/event/' . $event->getSlug();
+            $this->Helpers->generateEncryptLink($lien, $event->getSlug());
+
             return $this->json(
                 [
                     'status' => 'success',
