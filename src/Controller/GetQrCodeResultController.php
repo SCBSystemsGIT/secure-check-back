@@ -22,21 +22,33 @@ class GetQrCodeResultController extends AbstractController
         private CheckInsRepository $checkInsRepo
     ) {}
 
-    #[Route('/get-qr-data/{uidn}')] 
+    #[Route('/get-qr-data/{uidn}')]
     public function getQrResult($uidn, Request $request)
     {
         $isManual = $request->query->get('type');
 
         $qr = $this->qRCodesRepo->findOneBy(['uidn' => $uidn]);
-        if ($qr->isUsed()) {
+
+        if (!empty($qr)) {
+            if ($qr->isUsed()) {
+                return $this->json(
+                    [
+                        'status' => 'success',
+                        'message' => "Déja utilisé"
+                    ],
+                    Response::HTTP_OK
+                );
+            }
+        } else {
             return $this->json(
                 [
                     'status' => 'success',
-                    'message' => "Déja utilisé"
+                    'message' => "Non Valide"
                 ],
                 Response::HTTP_OK
             );
         }
+
 
         $currentDateTime = new DateTime();
         if ($currentDateTime > $qr->getExpirationDate()) {
