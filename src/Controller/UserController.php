@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
 use App\Entity\Departements;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -68,7 +69,7 @@ class UserController extends AbstractController
             }
 
             // Define required fields
-            $requiredFields = ['name', 'firstname', 'email', 'password', 'role', 'title', 'department_id'];
+            $requiredFields = ['name', 'firstname', 'email', 'password', 'role', 'title', 'department_id', 'company_id'];
 
             // Validate required fields using the helper function
             $missingFields = $this->Helpers->validateRequiredFields($data, $requiredFields);
@@ -84,7 +85,15 @@ class UserController extends AbstractController
             if (!$department) {
                 throw new \InvalidArgumentException('Invalid department_id');
             }
-
+            
+            // Récupérer le département
+            $company = $this->entityManager
+                ->getRepository(Company::class)
+                ->find($data["company_id"]);
+            // ->findOneBy(["name"=>$data["company_id"]]);
+            if (!$company) {
+                throw new \InvalidArgumentException('Invalid company_id');
+            }
 
             $user = new User();
             $user->setName($data["name"]);
@@ -94,6 +103,7 @@ class UserController extends AbstractController
             $user->setTitle($data['title']);
             $user->setRole([$data['role']] ?? ['ROLE_USER']);
             $user->setDepartment($department);
+            $user->setCompany($company);
             $user->setPassword(
                 $this->passwordHasher->hashPassword(
                     $user,

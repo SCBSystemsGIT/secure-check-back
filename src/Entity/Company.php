@@ -44,9 +44,23 @@ class Company
     #[Groups(['evenements','company'])]
     private ?string $logo = null;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'company')]
+    private Collection $users;
+
+    /**
+     * @var Collection<int, Visitors>
+     */
+    #[ORM\OneToMany(targetEntity: Visitors::class, mappedBy: 'company')]
+    private Collection $visitors;
+
     public function __construct()
     {
         $this->evenements = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->visitors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,6 +160,66 @@ class Company
     public function setLogo(string $logo): static
     {
         $this->logo = $logo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getCompany() === $this) {
+                $user->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Visitors>
+     */
+    public function getVisitors(): Collection
+    {
+        return $this->visitors;
+    }
+
+    public function addVisitor(Visitors $visitor): static
+    {
+        if (!$this->visitors->contains($visitor)) {
+            $this->visitors->add($visitor);
+            $visitor->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVisitor(Visitors $visitor): static
+    {
+        if ($this->visitors->removeElement($visitor)) {
+            // set the owning side to null (unless already changed)
+            if ($visitor->getCompany() === $this) {
+                $visitor->setCompany(null);
+            }
+        }
 
         return $this;
     }

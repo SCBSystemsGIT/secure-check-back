@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
 use App\Entity\Evenements;
 use App\Entity\Visitors;
 use App\Entity\User;
@@ -91,19 +92,24 @@ class VisitorsController extends AbstractController
                 }
             }
 
-
             $visitor = new Visitors();
             if (isset($data["evenements_id"])) {
                 $event = $this->entityManager->getRepository(Evenements::class)->find($data['evenements_id']);
                 $visitor->setEvenements($event);
             }
+
+            if (isset($data["company_id"])) {
+                $company = $this->entityManager->getRepository(Company::class)->find($data['company_id']);
+                $visitor->setCompany($company);
+            }
+
             $visitor->setUser($user ?? null);
             $visitor->setFirstname($data['firstname']);
             $visitor->setLastname($data['lastname']);
             $visitor->setEmail($data['email']);
             $visitor->setContact($data['contact']);
             $visitor->setAddress($data['address']);
-            $visitor->setOrganisationName($data['organisation_name']);
+            $visitor->setOrganisationName(  $data['organisation_name']);
             $visitor->setVisitorType((int) $data['visitor_type']);
             $visitor->setIdNumber($data['id_number']);
             $visitor->setCreatedAt(new \DateTimeImmutable());

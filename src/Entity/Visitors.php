@@ -81,6 +81,9 @@ class Visitors
     #[Groups(['request'])]
     private ?Evenements $evenements = null;
 
+    #[ORM\ManyToOne(inversedBy: 'visitors')]
+    private ?Company $company = null;
+
     public function __construct()
     {
         $this->requests = new ArrayCollection();
@@ -323,6 +326,18 @@ class Visitors
     public function setEvenements(?Evenements $evenements): static
     {
         $this->evenements = $evenements;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

@@ -84,10 +84,10 @@ class CompanyService extends AbstractController
             ], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json([
+        return $this->json(data: [
             "message" => "Entreprise",
             "data" => $company
-        ], 200, [], ['groups' => 'company']);
+        ], status: 200, headers: [], context: ['groups' => 'company']);
     }
 
     public function update($data, $company)
