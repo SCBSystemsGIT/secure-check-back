@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
 use App\Entity\QRCodes;
 use App\Entity\Requests;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,6 +48,7 @@ class RequestsController extends AbstractController
         $this->userRepository = $userRepository;
         $this->requestRepository = $requestRepository;
     }
+
     /**
      * @return Response
      **/
@@ -58,6 +60,38 @@ class RequestsController extends AbstractController
             ["created_at" => "DESC"]
         );
         return $this->json($datas, 200, [], [
+            'groups' => 'request'
+        ]);
+    }
+
+    /**
+     * @return Response
+     **/
+    #[Route('/api/requests/list/{companySlug}', name: 'app_requests_by_comp', methods: ['GET'])]
+    public function visitorsListByComp(EntityManagerInterface $entityManager, $companySlug): Response
+    {
+        $company = $entityManager->getRepository(Company::class)
+            ->findOneBy(['slug' => $companySlug]);
+
+        if (empty($company)) {
+            return $this->json([
+                "error" => 'not found company',
+            ], 404);
+        }
+
+        $finalDatas = [];
+        $datas = $entityManager->getRepository(Requests::class)->findBy(
+            [],
+            ["created_at" => "DESC"]
+        );
+
+        foreach ($datas as $data) {
+            if ($data->getVisitor()?->getCompany()?->getSlug() == $company->getSlug()) {
+                array_push($finalDatas, $data);
+            }
+        }
+
+        return $this->json($finalDatas, 200, [], [
             'groups' => 'request'
         ]);
     }

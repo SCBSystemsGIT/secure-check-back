@@ -50,6 +50,29 @@ class UserController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @return Response
+     **/
+    #[Route('/api/user/list/{companySlug}', name: 'app_user', methods: ['GET'])]
+    public function userListComp(EntityManagerInterface $entityManager, $companySlug): Response
+    {
+
+        $company = $entityManager->getRepository(Company::class)
+            ->findOneBy(['slug' => $companySlug]);
+
+        if (empty($company)) {
+            return $this->json([
+                "error" => 'not found company',
+            ], 404);
+        }
+
+        $datas = $entityManager->getRepository(User::class)->findBy(['company' => $company], array("create_at" => "DESC"));
+        return $this->json($datas, 200, [], [
+            'groups' => 'users'
+        ]);
+    }
+
     /**  
      * Enregistrement d'un utilisateur
      * @param Request $request
@@ -85,7 +108,7 @@ class UserController extends AbstractController
             if (!$department) {
                 throw new \InvalidArgumentException('Invalid department_id');
             }
-            
+
             // Récupérer le département
             $company = $this->entityManager
                 ->getRepository(Company::class)
