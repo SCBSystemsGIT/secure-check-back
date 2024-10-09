@@ -36,7 +36,7 @@ class CompanyController extends AbstractController
         return $this->companyService->show($slug);
     }
 
-    #[Route('/company/{id}', name: 'company_update', methods: ['PUT'])]
+    #[Route('/api/company/{id}', name: 'company_update', methods: ['PUT'])]
     public function update(Request $request, Company $company): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

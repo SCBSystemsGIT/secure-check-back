@@ -99,14 +99,16 @@ class CompanyService extends AbstractController
         }
 
         $company->setName($data['name'])->setDescription($data['description']);
-        $company->generateSlug($data['name']);
+        $company->generateSlug(
+            $this->slugger
+        );
 
         $this->entityManager->flush();
 
-        return new JsonResponse([
-            'message' => 'Mise à jour effectuée',
-            'data' => $company
-        ], Response::HTTP_OK);
+        return $this->json(data: [
+            "message" => "Mise à jour effectuée",
+            "data" => $company
+        ], status: 200, headers: [], context: ['groups' => 'company']);
     }
 
     public function delete($company)
