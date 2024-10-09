@@ -54,7 +54,7 @@ class UserController extends AbstractController
     /**
      * @return Response
      **/
-    #[Route('/api/user/list/{companySlug}', name: 'app_user', methods: ['GET'])]
+    #[Route('/api/user/list/{companySlug}', name: 'app_user_by_comp', methods: ['GET'])]
     public function userListComp(EntityManagerInterface $entityManager, $companySlug): Response
     {
 
