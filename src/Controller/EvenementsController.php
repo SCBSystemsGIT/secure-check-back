@@ -54,6 +54,30 @@ class EvenementsController extends AbstractController
         ]);
     }
 
+    /**
+     * @return Response
+     **/
+    #[Route('/api/evenement/list/{companySlug}', name: 'app_evenements_by_company', methods: ['GET'])]
+    public function departmentListByCompany(EntityManagerInterface $entityManager, $companySlug): Response
+    {
+        $company = $entityManager->getRepository(Company::class)->findOneBy(['slug' => $companySlug]);
+
+        if (empty($company)) {
+            return $this->json([
+                "error" => 'not found company',
+            ], 404);
+        }
+
+        $datas = $entityManager->getRepository(Evenements::class)->findBy(
+            ["company" => $company],
+            ['date_event' => 'DESC', 'time_event' => 'DESC']
+        );
+
+        return $this->json($datas, 200, [], [
+            'groups' => 'evenements'
+        ]);
+    }
+
     /**  
      * Enregistrement d'un Evènement
      * @param Request $request
@@ -70,7 +94,14 @@ class EvenementsController extends AbstractController
             }
 
             // Define required fields
-            $requiredFields = ['name', 'company_id', 'location', 'departement_id', 'date_event', 'time_event'];
+            $requiredFields = [
+                'name',
+                'company_id',
+                'location',
+                // 'departement_id', 
+                'date_event',
+                'time_event'
+            ];
 
             // Validate required fields using the helper function
             $missingFields = $this->Helpers->validateRequiredFields($data, $requiredFields);
@@ -79,7 +110,7 @@ class EvenementsController extends AbstractController
             }
 
             // Récupérer le département
-            $department = $this->entityManager->getRepository(Departements::class)->find($data["departement_id"]);
+            $department = $this->entityManager->getRepository(Departements::class)->find($data["departement_id"] ?? 1);
             if (!$department) {
                 throw new \InvalidArgumentException('Invalid department_id');
             }
@@ -106,6 +137,7 @@ class EvenementsController extends AbstractController
             $event->setName($data["name"])->generateSlug($this->slugger);
             $event->setCompany($company);
             $event->setLocation($data["location"]);
+            $event->setAddressName($data["address_name"]);
             $event->setDepartement($department);
             $event->setDateEvent($dateEvent);
             $event->setTimeEvent($timeEvent);

@@ -70,6 +70,9 @@ class Evenements
 
     private Collection $visitors;
 
+    #[ORM\Column(length: 255)]
+    private ?string $addressName = null;
+
     public function __construct()
     {
         $this->visitors = new ArrayCollection();
@@ -233,6 +236,18 @@ class Evenements
                 $visitor->setEvenements(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddressName(): ?string
+    {
+        return $this->addressName;
+    }
+
+    public function setAddressName(string $addressName): static
+    {
+        $this->addressName = $addressName;
 
         return $this;
     }
