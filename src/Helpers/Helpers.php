@@ -290,9 +290,9 @@ class Helpers extends AbstractController
                 ->build();
 
             if($type == 'perm'){
-                $filePath = 'qrcode-perm/qrcode-' . $uidn . '.png';
+                $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';
             }else{
-                $filePath = 'qrcode-temp/qrcode-' . $uidn . '.png';
+                $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';
             }
             
             $qrCode->saveToFile($filePath);
