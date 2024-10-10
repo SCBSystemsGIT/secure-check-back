@@ -23,7 +23,7 @@ class CreateQRController extends AbstractController
         private MailerInterface $mailer
     ) {
         // $this->Helpers = $Helpers;
-    }
+    }   
 
     #[Route('/api/create-qr', name: 'app_create_q_r')]
     public function __invoke(Request $request): Response
@@ -35,13 +35,14 @@ class CreateQRController extends AbstractController
                         ->em
                         ->getRepository(User::class)
                         ->findOneBy(['email' => $data['email']]);
+
         if (empty($user)) {
             return $this->json([
                 "message" => "le mail n'existe pas"
             ], 404);
         }
 
-        $qr->setEmail($data['email']);
+        $qr->setEmail($data['email']);  
         $uidn = uniqid();
         $qr->setUidn(uidn: $uidn);
         $qr->setType($data["type"]);
