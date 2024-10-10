@@ -31,7 +31,10 @@ class CreateQRController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $qr = new QRUser();
 
-        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+        $user = $this
+                        ->em
+                        ->getRepository(User::class)
+                        ->findOneBy(['email' => $data['email']]);
         if (empty($user)) {
             return $this->json([
                 "message" => "le mail n'existe pas"
