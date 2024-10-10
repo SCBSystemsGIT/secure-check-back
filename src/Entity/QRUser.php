@@ -22,6 +22,9 @@ class QRUser
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $dateExp = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class QRUser
     public function setType(string $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getDateExp(): ?string
+    {
+        return $this->dateExp;
+    }
+
+    public function setDateExp(string $dateExp): static
+    {
+        $this->dateExp = $dateExp;
 
         return $this;
     }
