@@ -278,6 +278,34 @@ class Helpers extends AbstractController
         }
     }
 
+    public function generateEncryptQR($type, $data, $uidn)
+    {
+        try {
+
+            $qrCode = Builder::create()
+                ->writer(new PngWriter())
+                ->data(json_encode($data))
+                ->encoding(encoding: new Encoding('UTF-8'))
+                ->size(300)
+                ->build();
+
+            if($type == 'perm'){
+                $filePath = 'qrcode-perm/qrcode-' . $uidn . '.png';
+            }else{
+                $filePath = 'qrcode-temp/qrcode-' . $uidn . '.png';
+            }
+            
+            $qrCode->saveToFile($filePath);
+
+            return $filePath;
+
+        } catch (\Exception $e) {
+
+            throw new \Exception('QR code generation failed: ' . $e->getMessage());
+            
+        }
+    }
+
     public function sendEmail(
         $to,
         $subject,
