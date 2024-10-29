@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
+use App\Entity\Evenements;
 use App\Entity\Visitors;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use App\Helpers\Helpers;
-
+use App\Services\FileUploader;
 
 class VisitorsController extends AbstractController
 {
@@ -34,7 +36,8 @@ class VisitorsController extends AbstractController
         ValidatorInterface $validator,
         Helpers $Helpers,
         VisitorsRepository $visitorsRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        // private FileUploader $fileUploader
     ) {
         $this->entityManager = $entityManager;
         $this->serializer = $serializer;
@@ -79,7 +82,7 @@ class VisitorsController extends AbstractController
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
 
-            if(isset($data['user_id'])){
+            if (isset($data['user_id'])) {
                 $user = $this->userRepository->find($data['user_id']);
 
                 if (!$user) {
@@ -89,20 +92,30 @@ class VisitorsController extends AbstractController
                     ], Response::HTTP_NOT_FOUND);
                 }
             }
-            #$user = $this->entityManager->getRepository(User::class)->find($data['user_id']);
-           
+
             $visitor = new Visitors();
+            if (isset($data["evenements_id"])) {
+                $event = $this->entityManager->getRepository(Evenements::class)->find($data['evenements_id']);
+                $visitor->setEvenements($event);
+            }
+
+            if (isset($data["company_id"])) {
+                $company = $this->entityManager->getRepository(Company::class)->find($data['company_id']);
+                $visitor->setCompany($company);
+            }
+
             $visitor->setUser($user ?? null);
             $visitor->setFirstname($data['firstname']);
             $visitor->setLastname($data['lastname']);
             $visitor->setEmail($data['email']);
             $visitor->setContact($data['contact']);
             $visitor->setAddress($data['address']);
-            $visitor->setOrganisationName($data['organisation_name']);
+            $visitor->setOrganisationName(  $data['organisation_name']);
             $visitor->setVisitorType((int) $data['visitor_type']);
             $visitor->setIdNumber($data['id_number']);
             $visitor->setCreatedAt(new \DateTimeImmutable());
             $visitor->setUpdatedAt(new \DateTimeImmutable());
+
 
             // Save the visitor entity
             $this->entityManager->persist($visitor);
@@ -127,11 +140,14 @@ class VisitorsController extends AbstractController
                     "visitor_id" => $visitor->getId(),
                 ]
             ], Response::HTTP_CREATED);
+
         } catch (\InvalidArgumentException $e) {
+
             return $this->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
+
         } catch (\Exception $e) {
             // Log the exception message if needed
             // $this->logger->error($e->getMessage());
@@ -140,6 +156,7 @@ class VisitorsController extends AbstractController
                 'status' => 'error',
                 'message' => 'An error occurred: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
+
         }
     }
 }

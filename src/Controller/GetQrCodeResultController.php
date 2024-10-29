@@ -9,6 +9,7 @@ use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -22,26 +23,39 @@ class GetQrCodeResultController extends AbstractController
     ) {}
 
     #[Route('/get-qr-data/{uidn}')]
-    public function getQrResult($uidn)
+    public function getQrResult($uidn, Request $request)
     {
+        $isManual = $request->query->get('type');
 
         $qr = $this->qRCodesRepo->findOneBy(['uidn' => $uidn]);
-        if ($qr->isUsed()) {
+
+        if (!empty($qr)) {
+            if ($qr->isUsed()) {
+                return $this->json(
+                    [
+                        'status' => 'success',
+                        'message' => "Déja utilisé"
+                    ],
+                    Response::HTTP_OK
+                );
+            }
+        } else {
             return $this->json(
                 [
                     'status' => 'success',
-                    'message' => "Déja utilisé"
+                    'message' => "Non Valide"
                 ],
                 Response::HTTP_OK
             );
         }
+
 
         $currentDateTime = new DateTime();
         if ($currentDateTime > $qr->getExpirationDate()) {
             return $this->json(
                 [
                     'status' => 'error',
-                    'message' => "Le QR code est expiré"
+                    'message' => "Le QR code a expiré"
                 ],
                 Response::HTTP_BAD_REQUEST
             );
@@ -51,23 +65,36 @@ class GetQrCodeResultController extends AbstractController
         if (sizeof($isAlreadyCheckIn) > 0) {
             $this->updateCheckIn($qr);
 
+            if ($isManual) {
+
+                return $this->json(
+                    [
+                        'status' => 'success',
+                        'message' => "CheckOut éffectué"
+                    ],
+                    Response::HTTP_OK
+                );
+            }
+
+            $url = $this->getParameter('domain_front') . '/success-checkout/' . $uidn;
+            return $this->redirect($url);
+        }
+
+        $this->saveCheckIn($qr);
+
+        if ($isManual) {
+
             return $this->json(
                 [
                     'status' => 'success',
-                    'message' => "CheckOut éffectué"
+                    'message' => "CheckIn éffectué"
                 ],
                 Response::HTTP_OK
             );
         }
-        $this->saveCheckIn($qr);
+        $url = $this->getParameter('domain_front') . '/success-checkin/' . $uidn;
 
-        return $this->json(
-            [
-                'status' => 'success',
-                'message' => "CheckIn éffectué"
-            ],
-            Response::HTTP_OK
-        );
+        return $this->redirect($url);
     }
 
     public function saveCheckIn($qr)

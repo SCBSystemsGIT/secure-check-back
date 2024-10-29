@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 #use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Endroid\QrCode\Builder\Builder;
@@ -15,7 +16,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 
-class Helpers
+class Helpers extends AbstractController
 {
     private $mailer;
 
@@ -203,7 +204,6 @@ class Helpers
         }
     }
 
-
     public function generateEncrypt($visitorId, $uidn, $host_name)
     {
         try {
@@ -214,14 +214,14 @@ class Helpers
                 'host' => $host_name,
             ];
 
-            $url = "http://192.168.1.3:9999/get-qr-data/" . $uidn;
+            $url = $this->getParameter('domain_name_no_auth') . "/get-qr-data/" . $uidn;
             // $jsonData = json_encode($data);
 
             // 2. Chiffrement des données
-            $encryptionKey = 'secure'; // Remplacez par une clé secrète
-            $cipherMethod = 'AES-256-CBC';
-            $ivLength = openssl_cipher_iv_length($cipherMethod);
-            $iv = openssl_random_pseudo_bytes($ivLength);
+            // $encryptionKey = 'secure'; // Remplacez par une clé secrète
+            // $cipherMethod = 'AES-256-CBC';
+            // $ivLength = openssl_cipher_iv_length($cipherMethod);
+            // $iv = openssl_random_pseudo_bytes($ivLength);
 
             // $encryptedData = openssl_encrypt($jsonData, $cipherMethod, $encryptionKey, 0, $iv);
             // if ($encryptedData === false) {
@@ -236,7 +236,7 @@ class Helpers
                 ->data($url)
                 // ->data($jsonData)
                 // ->data($encryptedDataWithIv)
-                ->encoding(new Encoding('UTF-8'))
+                ->encoding(encoding: new Encoding('UTF-8'))
                 ->size(300)
                 // ->validateResult(1)
                 ->build();
@@ -248,7 +248,6 @@ class Helpers
             // $this->fileUploader->upload();
 
             $qrCode->saveToFile($filePath);
-
             return $filePath;
         } catch (\Exception $e) {
             // Gestion des erreurs
@@ -256,11 +255,64 @@ class Helpers
         }
     }
 
-    public function sendEmail(
-        $to, $subject, $body, $data
-        
-        )
+    public function generateEncryptLink($lien, $slug)
     {
+        try {
+
+            $qrCode = Builder::create()
+                ->writer(new PngWriter())
+                ->data($lien)
+                ->encoding(encoding: new Encoding('UTF-8'))
+                ->size(300)
+                ->build();
+
+            $filePath = 'qrcode-link/qrcode-' . $slug . '.png';
+            $qrCode->saveToFile($filePath);
+
+            return $filePath;
+
+        } catch (\Exception $e) {
+
+            throw new \Exception('QR code generation failed: ' . $e->getMessage());
+            
+        }
+    }
+
+    public function generateEncryptQR($type, $data, $uidn)
+    {
+        try {
+
+            $qrCode = Builder::create()
+                ->writer(new PngWriter())
+                ->data(json_encode($data))
+                ->encoding(encoding: new Encoding('UTF-8'))
+                ->size(300)
+                ->build();
+
+            if($type == 'perm'){
+                $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';
+            }else{
+                $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';
+            }
+            
+            $qrCode->saveToFile($filePath);
+
+            return $filePath;
+
+        } catch (\Exception $e) {
+
+            throw new \Exception('QR code generation failed: ' . $e->getMessage());
+            
+        }
+    }
+
+    public function sendEmail(
+        $to,
+        $subject,
+        $body,
+        $data
+
+    ) {
         // Valider l'adresse e-mail
         if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException('Invalid email address.');
@@ -269,15 +321,15 @@ class Helpers
         // Envoyer l'email avec l'adresse correcte
         $uidn = $data['uidn'];
         $email = (new Email())
-            ->from('noreply@scb.com')
+            ->from('noreply@express54.org')
             ->to($to)
             ->subject($subject)
             ->html($body);
 
-            //->attachFromPath("http://192.168.1.3:9999/qrcode/qrcode-$uidn.png", 'qrc-code', 'image/png');
+        //->attachFromPath("http://192.168.1.3:9999/qrcode/qrcode-$uidn.png", 'qrc-code', 'image/png');
 
-            $message = new SendEmailMessage($email);
-            $this->bus->dispatch($message);
+        $message = new SendEmailMessage($email);
+        $this->bus->dispatch($message);
 
         try {
             $this->mailer->send($email);

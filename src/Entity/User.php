@@ -31,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['users'])]
+    #[Groups(['users', 'request'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -77,7 +77,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $status = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['request'])]
     private ?string $contact = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Company $company = null;
 
     public function __construct()
     {
@@ -303,5 +307,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return array_unique($roles);
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
+
+        return $this;
     }
 }

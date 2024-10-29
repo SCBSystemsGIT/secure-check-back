@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
 use App\Entity\Departements;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,6 +50,29 @@ class UserController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @return Response
+     **/
+    #[Route('/api/user/list/{companySlug}', name: 'app_user_by_comp', methods: ['GET'])]
+    public function userListComp(EntityManagerInterface $entityManager, $companySlug): Response
+    {
+
+        $company = $entityManager->getRepository(Company::class)
+            ->findOneBy(['slug' => $companySlug]);
+
+        if (empty($company)) {
+            return $this->json([
+                "error" => 'not found company',
+            ], 404);
+        }
+
+        $datas = $entityManager->getRepository(User::class)->findBy(['company' => $company], array("create_at" => "DESC"));
+        return $this->json($datas, 200, [], [
+            'groups' => 'users'
+        ]);
+    }
+
     /**  
      * Enregistrement d'un utilisateur
      * @param Request $request
@@ -68,7 +92,7 @@ class UserController extends AbstractController
             }
 
             // Define required fields
-            $requiredFields = ['name', 'firstname', 'email', 'password', 'role', 'title', 'department_id'];
+            $requiredFields = ['name', 'firstname', 'email', 'password', 'role', 'title', 'department_id', 'company_id'];
 
             // Validate required fields using the helper function
             $missingFields = $this->Helpers->validateRequiredFields($data, $requiredFields);
@@ -85,6 +109,14 @@ class UserController extends AbstractController
                 throw new \InvalidArgumentException('Invalid department_id');
             }
 
+            // Récupérer le département
+            $company = $this->entityManager
+                ->getRepository(Company::class)
+                ->find($data["company_id"]);
+            // ->findOneBy(["name"=>$data["company_id"]]);
+            if (!$company) {
+                throw new \InvalidArgumentException('Invalid company_id');
+            }
 
             $user = new User();
             $user->setName($data["name"]);
@@ -94,6 +126,7 @@ class UserController extends AbstractController
             $user->setTitle($data['title']);
             $user->setRole([$data['role']] ?? ['ROLE_USER']);
             $user->setDepartment($department);
+            $user->setCompany($company);
             $user->setPassword(
                 $this->passwordHasher->hashPassword(
                     $user,

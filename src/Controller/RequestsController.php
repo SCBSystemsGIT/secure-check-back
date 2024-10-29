@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
 use App\Entity\QRCodes;
 use App\Entity\Requests;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,15 +48,50 @@ class RequestsController extends AbstractController
         $this->userRepository = $userRepository;
         $this->requestRepository = $requestRepository;
     }
+
     /**
      * @return Response
      **/
     #[Route('/api/requests/list', name: 'app_requests', methods: ['GET'])]
     public function visitorsList(EntityManagerInterface $entityManager): Response
     {
-        $datas = $entityManager->getRepository(Requests::class)->findBy([],
-            ["created_at" => "DESC"]);
+        $datas = $entityManager->getRepository(Requests::class)->findBy(
+            [],
+            ["created_at" => "DESC"]
+        );
         return $this->json($datas, 200, [], [
+            'groups' => 'request'
+        ]);
+    }
+
+    /**
+     * @return Response
+     **/
+    #[Route('/api/requests/list/{companySlug}', name: 'app_requests_by_comp', methods: ['GET'])]
+    public function visitorsListByComp(EntityManagerInterface $entityManager, $companySlug): Response
+    {
+        $company = $entityManager->getRepository(Company::class)
+            ->findOneBy(['slug' => $companySlug]);
+
+        if (empty($company)) {
+            return $this->json([
+                "error" => 'not found company',
+            ], 404);
+        }
+
+        $finalDatas = [];
+        $datas = $entityManager->getRepository(Requests::class)->findBy(
+            [],
+            ["created_at" => "DESC"]
+        );
+
+        foreach ($datas as $data) {
+            if ($data->getVisitor()?->getCompany()?->getSlug() == $company->getSlug()) {
+                array_push($finalDatas, $data);
+            }
+        }
+
+        return $this->json($finalDatas, 200, [], [
             'groups' => 'request'
         ]);
     }
@@ -141,8 +177,6 @@ class RequestsController extends AbstractController
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            // dd($user ?? "OK");
-
             return new JsonResponse([
                 'status' => 'success',
                 'message' => 'Request submitted successfully',
@@ -212,13 +246,12 @@ class RequestsController extends AbstractController
             $this->entityManager->persist($request_datas);
             $this->entityManager->persist($qrCode);
             $this->entityManager->flush();
-
             $dataEmail = [
                 "uidn" => $uidn
             ];
 
-            $qrCodeUrl = "http://192.168.1.3:9999/qrcode/qrcode-$uidn.png";
-            
+            $qrCodeUrl = $this->getParameter('domain_name') . "/qrcode/qrcode-$uidn.png";
+
             $this->helpers->sendEmail(
                 $request_datas->getVisitor()->getEmail(),
                 "Secure Check - QRCode",

@@ -14,7 +14,7 @@ class Visitors
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['visitor', 'request'])]
+    #[Groups(['visitor', 'request', 'evenements'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'visitors')]
@@ -22,19 +22,19 @@ class Visitors
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['visitor', 'request'])]
+    #[Groups(['visitor', 'request', 'evenements'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['visitor', 'request'])]
+    #[Groups(['visitor', 'request', 'evenements'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['visitor'])]
+    #[Groups(groups: ['visitor', 'evenements', 'request'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['visitor'])]
+    #[Groups(['visitor', 'request'])]
     private ?string $contact = null;
 
     #[ORM\Column(length: 255)]
@@ -76,6 +76,13 @@ class Visitors
 
     #[ORM\Column(nullable: true)]
     private ?int $visitor_type = null;
+
+    #[ORM\ManyToOne(inversedBy: 'visitors')]
+    #[Groups(['request'])]
+    private ?Evenements $evenements = null;
+
+    #[ORM\ManyToOne(inversedBy: 'visitors')]
+    private ?Company $company = null;
 
     public function __construct()
     {
@@ -307,6 +314,30 @@ class Visitors
     public function setVisitorType(?int $visitor_type): static
     {
         $this->visitor_type = $visitor_type;
+
+        return $this;
+    }
+
+    public function getEvenements(): ?Evenements
+    {
+        return $this->evenements;
+    }
+
+    public function setEvenements(?Evenements $evenements): static
+    {
+        $this->evenements = $evenements;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }
