@@ -90,7 +90,11 @@ class CompanyService extends AbstractController
         ], status: 200, headers: [], context: ['groups' => 'company']);
     }
 
+<<<<<<< HEAD
     public function update($data, $company, $file)
+=======
+    public function update($data, $company)
+>>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
     {
         if (!$company) {
             return new JsonResponse([
@@ -102,6 +106,7 @@ class CompanyService extends AbstractController
         $company->generateSlug(
             $this->slugger
         );
+<<<<<<< HEAD
         
         if(!empty($file)){
             $data['logo'] = $this->fileUploader->upload($file, "logo");
@@ -109,6 +114,9 @@ class CompanyService extends AbstractController
         }
 
         $this->entityManager->persist($company);
+=======
+
+>>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
         $this->entityManager->flush();
 
         return $this->json(data: [

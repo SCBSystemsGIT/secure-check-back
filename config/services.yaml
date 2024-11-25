@@ -4,6 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    domain_name: "%env(DOMAIN_NAME)%"
+    domain_name_no_auth: "%env(DOMAIN_NAME_NO_AUTH)%"
+    domain_front: "%env(DOMAIN_FRONT)%"
     gtp.base_uri: "%env(GTP_BASE_URI)%"
     gtp.program_id: "%env(GTP_PROGRAM_ID)%"
     gtp.program_id_virtual: "%env(GTP_PROGRAM_ID_VIRTUAL)%"
@@ -174,14 +177,14 @@ services:
                   method: onJWTInvalid,
               }
 monolog:
-    channels: ['mailer']
+    channels: ["mailer"]
     handlers:
         main:
             type: stream
-            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
         mailer:
             type: stream
-            path: '%kernel.logs_dir%/mailer_%kernel.environment%.log'
+            path: "%kernel.logs_dir%/mailer_%kernel.environment%.log"
             level: debug
-            channels: ['mailer']
+            channels: ["mailer"]

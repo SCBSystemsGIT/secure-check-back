@@ -22,14 +22,22 @@ class CreateQRController extends AbstractController
         private EntityManagerInterface $em,
         private MailerInterface $mailer
     ) {
+<<<<<<< HEAD
     }   
 
     #[Route('/api/create-qr', name: 'app_create_qr')]
+=======
+        // $this->Helpers = $Helpers;
+    }   
+
+    #[Route('/api/create-qr', name: 'app_create_q_r')]
+>>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
     public function __invoke(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
         $qr = new QRUser();
 
+<<<<<<< HEAD
         $admin = $this->getUser();
         if(empty($admin)){
             return $this->json([
@@ -43,12 +51,20 @@ class CreateQRController extends AbstractController
                     ->findOneBy(['email' => $data['email']]);
 
         
+=======
+        $user = $this
+                        ->em
+                        ->getRepository(User::class)
+                        ->findOneBy(['email' => $data['email']]);
+
+>>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
         if (empty($user)) {
             return $this->json([
                 "message" => "le mail n'existe pas"
             ], 404);
         }
 
+<<<<<<< HEAD
         if(!$admin->getCompany()->getSlug() == "scb"){
             
             if($user->getCompany()->getSlug() != $admin->getCompany()->getSlug()){
@@ -59,13 +75,19 @@ class CreateQRController extends AbstractController
             
         }
 
+=======
+>>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
         $qr->setEmail($data['email']);  
         $uidn = uniqid();
         $qr->setUidn(uidn: $uidn);
         $qr->setType($data["type"]);
 
         if($data["type"] == 'temp'){
+<<<<<<< HEAD
             $qr->setDateExp($data['date_exp']);
+=======
+            $qr->setType($data['date_exp']);
+>>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
         }
 
         $this->em->persist($qr);
@@ -84,6 +106,10 @@ class CreateQRController extends AbstractController
         ], Response::HTTP_OK);
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
     private function sendEmail(MailerInterface $mailer, $to): Response
     {
         // Créez l'email
