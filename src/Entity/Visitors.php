@@ -30,23 +30,19 @@ class Visitors
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-<<<<<<< HEAD
-<<<<<<< HEAD
     #[Groups(groups: ['visitor', 'evenements', 'request'])]
-=======
-    #[Groups(['visitor', 'evenements'])]
->>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
+
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['visitor', 'request'])]
-=======
+
     #[Groups(['visitor', 'evenements'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['visitor'])]
->>>>>>> origin/vedGit
+
     private ?string $contact = null;
 
     #[ORM\Column(length: 255)]
