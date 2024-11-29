@@ -91,10 +91,14 @@ class CompanyService extends AbstractController
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public function update($data, $company, $file)
 =======
     public function update($data, $company)
 >>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
+=======
+    public function update($data, $company)
+>>>>>>> origin/vedGit
     {
         if (!$company) {
             return new JsonResponse([
@@ -107,6 +111,7 @@ class CompanyService extends AbstractController
             $this->slugger
         );
 <<<<<<< HEAD
+<<<<<<< HEAD
         
         if(!empty($file)){
             $data['logo'] = $this->fileUploader->upload($file, "logo");
@@ -117,6 +122,9 @@ class CompanyService extends AbstractController
 =======
 
 >>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
+=======
+
+>>>>>>> origin/vedGit
         $this->entityManager->flush();
 
         return $this->json(data: [

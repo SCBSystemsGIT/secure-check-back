@@ -33,10 +33,14 @@ class EvenementsController extends AbstractController
         private CompanyRepository $companyRepository,
         private EvenementsRepository $eventRepo,
 <<<<<<< HEAD
+<<<<<<< HEAD
         private SluggerInterface $slugger
 =======
         private SluggerInterface $slugger,
 >>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
+=======
+        private SluggerInterface $slugger,
+>>>>>>> origin/vedGit
     ) {
         $this->entityManager = $entityManager;
         $this->serializer = $serializer;
