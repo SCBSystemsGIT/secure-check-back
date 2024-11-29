@@ -13,54 +13,44 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class CompanyService extends AbstractController
+class CompanyService
 {
-    private $entityManager;
-    private $validator;
-    private $resourceName = 'Entreprise';
+    private string $resourceName = 'Entreprise';
 
     public function __construct(
-        EntityManagerInterface $entityManager,
-        ValidatorInterface $validator,
+        private EntityManagerInterface $entityManager,
+        private ValidatorInterface $validator,
         private SluggerInterface $slugger,
         private CompanyRepository $companyRepository,
-        private FileUploader $fileUploader,
-
-    ) {
-        $this->entityManager = $entityManager;
-        $this->validator = $validator;
-    }
+        private FileUploader $fileUploader
+    ) {}
 
     public function add($data, $file)
     {
         $company = new Company();
-        $company->setName(name: $data['name'])
-            ->setDescription($data["description"])
+        $company->setName($data['name'])
+            ->setDescription($data['description'])
             ->generateSlug($this->slugger)
-            ->setCreatedAt(new DateTimeImmutable())
-        ;
+            ->setCreatedAt(new DateTimeImmutable());
 
         $errors = $this->validator->validate($company);
-
         if (count($errors) > 0) {
             $errorMessages = [];
             foreach ($errors as $error) {
                 $errorMessages[$error->getPropertyPath()] = $error->getMessage();
             }
-
-            return new JsonResponse([
-                'errors' => $errorMessages
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse(['errors' => $errorMessages], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        // dd($file);
-        $data['logo'] = $this->fileUploader->upload($file, "logo");
-        $company->setLogo($data['logo']);
+        if (!empty($file)) {
+            $logoPath = $this->fileUploader->upload($file, 'logo');
+            $company->setLogo($logoPath);
+        }
 
         $this->entityManager->persist($company);
         $this->entityManager->flush();
 
-        return $this->json(
+        return new JsonResponse(
             [
                 'message' => 'Création effectuée',
                 'data' => $company
@@ -71,95 +61,95 @@ class CompanyService extends AbstractController
 
     public function show($slug)
     {
-        if (is_numeric($slug)) {
-            $company = $this->companyRepository->find($slug);
-        } else {
-            $company = $this->companyRepository->findOneBy(['slug' => $slug]);
-        }
-
+        $company = is_numeric($slug)
+            ? $this->companyRepository->find($slug)
+            : $this->companyRepository->findOneBy(['slug' => $slug]);
 
         if (!$company) {
-            return new JsonResponse([
-                'message' => "$this->resourceName introuvable"
-            ], Response::HTTP_NOT_FOUND);
+            return new JsonResponse(
+                ['message' => "$this->resourceName introuvable"],
+                Response::HTTP_NOT_FOUND
+            );
         }
 
-        return $this->json(data: [
-            "message" => "Entreprise",
-            "data" => $company
-        ], status: 200, headers: [], context: ['groups' => 'company']);
+        return new JsonResponse(
+            [
+                'message' => 'Entreprise',
+                'data' => $company
+            ],
+            Response::HTTP_OK,
+            [],
+            ['groups' => 'company']
+        );
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    public function update($data, $company, $file)
-=======
-    public function update($data, $company)
->>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
-=======
-    public function update($data, $company)
->>>>>>> origin/vedGit
+    public function update($data, $company, $file = null)
     {
         if (!$company) {
-            return new JsonResponse([
-                'message' => "$this->resourceName introuvable"
-            ], Response::HTTP_NOT_FOUND);
+            return new JsonResponse(
+                ['message' => "$this->resourceName introuvable"],
+                Response::HTTP_NOT_FOUND
+            );
         }
 
-        $company->setName($data['name'])->setDescription($data['description']);
-        $company->generateSlug(
-            $this->slugger
-        );
-<<<<<<< HEAD
-<<<<<<< HEAD
-        
-        if(!empty($file)){
-            $data['logo'] = $this->fileUploader->upload($file, "logo");
-            $company->setLogo($data['logo']);
+        $company->setName($data['name'])
+            ->setDescription($data['description'])
+            ->generateSlug($this->slugger);
+
+        if (!empty($file)) {
+            $logoPath = $this->fileUploader->upload($file, 'logo');
+            $company->setLogo($logoPath);
         }
 
-        $this->entityManager->persist($company);
-=======
+        $errors = $this->validator->validate($company);
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[$error->getPropertyPath()] = $error->getMessage();
+            }
+            return new JsonResponse(['errors' => $errorMessages], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
->>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
-=======
-
->>>>>>> origin/vedGit
         $this->entityManager->flush();
 
-        return $this->json(data: [
-            "message" => "Mise à jour effectuée",
-            "data" => $company
-        ], status: 200, headers: [], context: ['groups' => 'company']);
+        return new JsonResponse(
+            [
+                'message' => 'Mise à jour effectuée',
+                'data' => $company
+            ],
+            Response::HTTP_OK,
+            [],
+            ['groups' => 'company']
+        );
     }
 
     public function delete($company)
     {
         if (!$company) {
-            return new JsonResponse([
-                'message' => "$this->resourceName introuvable"
-            ], Response::HTTP_NOT_FOUND);
+            return new JsonResponse(
+                ['message' => "$this->resourceName introuvable"],
+                Response::HTTP_NOT_FOUND
+            );
         }
 
         $this->entityManager->remove($company);
         $this->entityManager->flush();
 
-        return $this->json([
-            'message' => 'Suppression effectuée'
-        ], Response::HTTP_NO_CONTENT);
+        return new JsonResponse(
+            ['message' => 'Suppression effectuée'],
+            Response::HTTP_NO_CONTENT
+        );
     }
 
     public function all()
     {
-        $companies = $this->entityManager->getRepository(Company::class)->findBy([], ['createdAt' => 'DESC']);
+        $companies = $this->companyRepository->findBy([], ['createdAt' => 'DESC']);
 
-        return $this->json(
-            [
-                'data' => $companies
-            ],
+        return new JsonResponse(
+            ['data' => $companies],
             Response::HTTP_OK,
             [],
-            ["groups" => 'company']
+            ['groups' => 'company']
         );
     }
 }

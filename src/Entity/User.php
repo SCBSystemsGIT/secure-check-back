@@ -30,12 +30,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['users', 'visitor'])]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
-<<<<<<< HEAD
     #[Groups(['users', 'request'])]
-=======
-    #[Groups(['users'])]
->>>>>>> origin/vedGit
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -81,10 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $status = null;
 
     #[ORM\Column(length: 255)]
-<<<<<<< HEAD
     #[Groups(['request'])]
-=======
->>>>>>> origin/vedGit
     private ?string $contact = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]

@@ -40,17 +40,11 @@ class CompanyController extends AbstractController
     public function update(Request $request, Company $company): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-<<<<<<< HEAD
-<<<<<<< HEAD
+
         $file = $request->files->get('logo');
 
         return $this->companyService->update($data, $company, $file);
-=======
-        return $this->companyService->update($data, $company);
->>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
-=======
-        return $this->companyService->update($data, $company);
->>>>>>> origin/vedGit
+
     }
 
     #[Route('/company/{id}', name: 'company_delete', methods: ['DELETE'])]

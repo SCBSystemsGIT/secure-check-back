@@ -200,11 +200,7 @@ class RequestsController extends AbstractController
         }
     }
 
-<<<<<<< HEAD
-    #[Route('/api/requests/update/{id}', name: 'update_request', methods: ['PUT'])]
-=======
     #[Route('/api/requests/update/{id}', name: 'update_request', methods: ['POST'])]
->>>>>>> origin/vedGit
     public function updaterequest(Request $request, $id): JsonResponse
     {
 
