@@ -22,29 +22,14 @@ class CreateQRController extends AbstractController
         private EntityManagerInterface $em,
         private MailerInterface $mailer
     ) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    }   
-
-    #[Route('/api/create-qr', name: 'app_create_qr')]
-=======
-=======
->>>>>>> origin/vedGit
         // $this->Helpers = $Helpers;
     }   
 
     #[Route('/api/create-qr', name: 'app_create_q_r')]
-<<<<<<< HEAD
->>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
-=======
->>>>>>> origin/vedGit
     public function __invoke(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
         $qr = new QRUser();
-
-<<<<<<< HEAD
-<<<<<<< HEAD
         $admin = $this->getUser();
         if(empty($admin)){
             return $this->json([
@@ -56,28 +41,11 @@ class CreateQRController extends AbstractController
                     ->em
                     ->getRepository(User::class)
                     ->findOneBy(['email' => $data['email']]);
-
-        
-=======
-=======
->>>>>>> origin/vedGit
-        $user = $this
-                        ->em
-                        ->getRepository(User::class)
-                        ->findOneBy(['email' => $data['email']]);
-
-<<<<<<< HEAD
->>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
-=======
->>>>>>> origin/vedGit
         if (empty($user)) {
             return $this->json([
                 "message" => "le mail n'existe pas"
             ], 404);
         }
-
-<<<<<<< HEAD
-<<<<<<< HEAD
         if(!$admin->getCompany()->getSlug() == "scb"){
             
             if($user->getCompany()->getSlug() != $admin->getCompany()->getSlug()){
@@ -87,26 +55,13 @@ class CreateQRController extends AbstractController
             }
             
         }
-
-=======
->>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
-=======
->>>>>>> origin/vedGit
         $qr->setEmail($data['email']);  
         $uidn = uniqid();
         $qr->setUidn(uidn: $uidn);
         $qr->setType($data["type"]);
 
         if($data["type"] == 'temp'){
-<<<<<<< HEAD
-<<<<<<< HEAD
-            $qr->setDateExp($data['date_exp']);
-=======
             $qr->setType($data['date_exp']);
->>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
-=======
-            $qr->setType($data['date_exp']);
->>>>>>> origin/vedGit
         }
 
         $this->em->persist($qr);
@@ -125,14 +80,6 @@ class CreateQRController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> bd12b5f7d17be2589322043848985aee0b166bc6
-=======
-
->>>>>>> origin/vedGit
     private function sendEmail(MailerInterface $mailer, $to): Response
     {
         // Créez l'email
