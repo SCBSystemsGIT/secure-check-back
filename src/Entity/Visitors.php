@@ -30,13 +30,11 @@ class Visitors
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(groups: ['visitor', 'evenements', 'request'])]
-
+    #[Groups(['visitor', 'evenements'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['visitor', 'request'])]
-
+    #[Groups(['visitor'])]
     private ?string $contact = null;
 
     #[ORM\Column(length: 255)]

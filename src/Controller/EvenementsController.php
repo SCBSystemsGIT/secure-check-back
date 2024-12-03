@@ -32,7 +32,7 @@ class EvenementsController extends AbstractController
         Helpers $Helpers,
         private CompanyRepository $companyRepository,
         private EvenementsRepository $eventRepo,
-        private SluggerInterface $slugger
+        private SluggerInterface $slugger,
     ) {
         $this->entityManager = $entityManager;
         $this->serializer = $serializer;

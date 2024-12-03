@@ -320,11 +320,20 @@ class Helpers extends AbstractController
 
         // Envoyer l'email avec l'adresse correcte
         $uidn = $data['uidn'];
+<<<<<<< HEAD
+=======
+        $qrCodeUrl = $this->getParameter('domain_name') . "/qrcode/qrcode-$uidn.png";
+>>>>>>> login-and-email-issue
         $email = (new Email())
             ->from('noreply@express54.org')
             ->to($to)
             ->subject($subject)
+<<<<<<< HEAD
             ->html($body);
+=======
+            ->html($body)
+            ->attachFromPath($qrCodeUrl, 'qrcode.png', 'image/png');
+>>>>>>> login-and-email-issue
 
         //->attachFromPath("http://192.168.1.3:9999/qrcode/qrcode-$uidn.png", 'qrc-code', 'image/png');
 

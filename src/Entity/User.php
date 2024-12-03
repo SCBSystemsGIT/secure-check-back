@@ -30,7 +30,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['users', 'visitor'])]
     private ?string $firstname = null;
 
-    #[Groups(['users', 'request'])]
+    #[ORM\Column(length: 255)]
+    #[Groups(['users'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -76,7 +77,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $status = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['request'])]
     private ?string $contact = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]

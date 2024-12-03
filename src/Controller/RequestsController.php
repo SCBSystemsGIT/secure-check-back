@@ -200,7 +200,7 @@ class RequestsController extends AbstractController
         }
     }
 
-    #[Route('/api/requests/update/{id}', name: 'update_request', methods: ['POST'])]
+    #[Route('/api/requests/update/{id}', name: 'update_request', methods: ['PUT'])]
     public function updaterequest(Request $request, $id): JsonResponse
     {
 
@@ -236,8 +236,16 @@ class RequestsController extends AbstractController
                 )
             ); // Assuming qrCodeService generates a QR code string
             $qrCode->setUidn($uidn); // Example unique identifier generation
-            $qrCode->setType('Temporaire'); // Or 'Permanent' based on logic
-            $qrCode->setExpirationDate(new \DateTime('+1 day')); // Set expiration date if applicable
+            //$qrCode->setType('Temporaire'); // Or 'Permanent' based on logic
+            if(@$request_datas->getVisitor()->getVisitorType() === 1){
+                $qrCode->setType('Permanent');
+                $qrCode->setExpirationDate(new \DateTime('+5 year'));
+            }
+            else{
+                $qrCode->setType('Temporaire');
+                $qrCode->setExpirationDate(new \DateTime('+1 day'));
+            } 
+            //$qrCode->setExpirationDate(new \DateTime('+1 day')); // Set expiration date if applicable
             $qrCode->setStatus(1);
             $qrCode->setCreatedAt(new \DateTimeImmutable());
             $qrCode->setUpdatedAt(new \DateTimeImmutable());
