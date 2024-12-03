@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "content-hash": "2103646c8448d54c7238e67df41f6277",
-=======
     "content-hash": "cbfc94eacfb28fe0c3f28b1878affb66",
->>>>>>> login-and-email-issue
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2666,18 +2662,6 @@
         },
         {
             "name": "symfony/asset-mapper",
-<<<<<<< HEAD
-            "version": "v7.1.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/asset-mapper.git",
-                "reference": "bb1c2f5f394c84ce5b1ac8c94d0ac213ae3ce5f8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/asset-mapper/zipball/bb1c2f5f394c84ce5b1ac8c94d0ac213ae3ce5f8",
-                "reference": "bb1c2f5f394c84ce5b1ac8c94d0ac213ae3ce5f8",
-=======
             "version": "v7.1.8",
             "source": {
                 "type": "git",
@@ -2688,7 +2672,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/asset-mapper/zipball/bd09ac29c8553e39832f6100a8365240c1c697a6",
                 "reference": "bd09ac29c8553e39832f6100a8365240c1c697a6",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -2738,11 +2721,7 @@
             "description": "Maps directories of assets & makes them available in a public directory with versioned filenames.",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/asset-mapper/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/asset-mapper/tree/v7.1.8"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -2758,7 +2737,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-20T11:08:58+00:00"
         },
         {
@@ -2773,22 +2751,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/cache/zipball/18e0ba45a50032aa53dfebf830ec2980bb131591",
                 "reference": "18e0ba45a50032aa53dfebf830ec2980bb131591",
-=======
-            "time": "2024-11-09T09:16:45+00:00"
-        },
-        {
-            "name": "symfony/cache",
-            "version": "v7.1.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/cache.git",
-                "reference": "23b61c9592ee72233c31625f0ae805dd1571e928"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/23b61c9592ee72233c31625f0ae805dd1571e928",
-                "reference": "23b61c9592ee72233c31625f0ae805dd1571e928",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -2856,11 +2818,7 @@
                 "psr6"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/cache/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/cache/tree/v7.1.7"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -2876,7 +2834,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-20T10:42:04+00:00"
         },
         {
@@ -2891,22 +2848,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/15a4f8e5cd3bce9aeafc882b1acab39ec8de2c1b",
                 "reference": "15a4f8e5cd3bce9aeafc882b1acab39ec8de2c1b",
-=======
-            "time": "2024-11-05T15:34:55+00:00"
-        },
-        {
-            "name": "symfony/cache-contracts",
-            "version": "v3.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/cache-contracts.git",
-                "reference": "df6a1a44c890faded49a5fca33c2d5c5fd3c2197"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/df6a1a44c890faded49a5fca33c2d5c5fd3c2197",
-                "reference": "df6a1a44c890faded49a5fca33c2d5c5fd3c2197",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -2953,11 +2894,7 @@
                 "standards"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/cache-contracts/tree/v3.5.1"
-=======
-                "source": "https://github.com/symfony/cache-contracts/tree/v3.5.0"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -2973,11 +2910,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-09-25T14:20:29+00:00"
-=======
-            "time": "2024-04-18T09:32:20+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/clock",
@@ -3223,7 +3156,6 @@
         },
         {
             "name": "symfony/dependency-injection",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -3234,18 +3166,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/900d2eac6e33aef743bdc10dd8c75d012215fd08",
                 "reference": "900d2eac6e33aef743bdc10dd8c75d012215fd08",
-=======
-            "version": "v7.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "e4d13f0f394f4d02a041ff76acd31c5a20a5f70b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/e4d13f0f394f4d02a041ff76acd31c5a20a5f70b",
-                "reference": "e4d13f0f394f4d02a041ff76acd31c5a20a5f70b",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -3296,11 +3216,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/dependency-injection/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/dependency-injection/tree/v7.1.8"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -3316,7 +3232,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-25T15:44:54+00:00"
         },
         {
@@ -3331,22 +3246,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6",
                 "reference": "74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6",
-=======
-            "time": "2024-11-09T09:16:45+00:00"
-        },
-        {
-            "name": "symfony/deprecation-contracts",
-            "version": "v3.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1",
-                "reference": "0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -3384,11 +3283,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/deprecation-contracts/tree/v3.5.1"
-=======
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.5.0"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -3404,7 +3299,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-09-25T14:20:29+00:00"
         },
         {
@@ -3419,22 +3313,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/893cc4fa0f218d6e88efbe58397e2b42167648e1",
                 "reference": "893cc4fa0f218d6e88efbe58397e2b42167648e1",
-=======
-            "time": "2024-04-18T09:32:20+00:00"
-        },
-        {
-            "name": "symfony/doctrine-bridge",
-            "version": "v7.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/doctrine-bridge.git",
-                "reference": "3fcfb37b738def92757b6ac5365a3147b2e2dd36"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/3fcfb37b738def92757b6ac5365a3147b2e2dd36",
-                "reference": "3fcfb37b738def92757b6ac5365a3147b2e2dd36",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -3464,11 +3342,7 @@
             },
             "require-dev": {
                 "doctrine/collections": "^1.0|^2.0",
-<<<<<<< HEAD
                 "doctrine/data-fixtures": "^1.1|^2",
-=======
-                "doctrine/data-fixtures": "^1.1",
->>>>>>> login-and-email-issue
                 "doctrine/dbal": "^3.6|^4",
                 "doctrine/orm": "^2.15|^3",
                 "psr/log": "^1|^2|^3",
@@ -3517,11 +3391,7 @@
             "description": "Provides integration for Doctrine with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/doctrine-bridge/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/doctrine-bridge/tree/v7.1.6"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -3537,11 +3407,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-25T12:02:18+00:00"
-=======
-            "time": "2024-10-18T09:42:06+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/doctrine-messenger",
@@ -3617,7 +3483,6 @@
         },
         {
             "name": "symfony/dotenv",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -3628,18 +3493,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/dotenv/zipball/245d1afe223664d2276afb75177d8988c328fb78",
                 "reference": "245d1afe223664d2276afb75177d8988c328fb78",
-=======
-            "version": "v7.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/dotenv.git",
-                "reference": "56a10f3032a6c2f085b13bc429e9d78a2c895dc4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dotenv/zipball/56a10f3032a6c2f085b13bc429e9d78a2c895dc4",
-                "reference": "56a10f3032a6c2f085b13bc429e9d78a2c895dc4",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -3684,11 +3537,7 @@
                 "environment"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/dotenv/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/dotenv/tree/v7.1.6"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -3704,11 +3553,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-27T11:17:28+00:00"
-=======
-            "time": "2024-09-28T11:14:12+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/error-handler",
@@ -3867,7 +3712,6 @@
         },
         {
             "name": "symfony/event-dispatcher-contracts",
-<<<<<<< HEAD
             "version": "v3.5.1",
             "source": {
                 "type": "git",
@@ -3878,18 +3722,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/event-dispatcher-contracts/zipball/7642f5e970b672283b7823222ae8ef8bbc160b9f",
                 "reference": "7642f5e970b672283b7823222ae8ef8bbc160b9f",
-=======
-            "version": "v3.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/event-dispatcher-contracts.git",
-                "reference": "8f93aec25d41b72493c6ddff14e916177c9efc50"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher-contracts/zipball/8f93aec25d41b72493c6ddff14e916177c9efc50",
-                "reference": "8f93aec25d41b72493c6ddff14e916177c9efc50",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -3936,11 +3768,7 @@
                 "standards"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/event-dispatcher-contracts/tree/v3.5.1"
-=======
-                "source": "https://github.com/symfony/event-dispatcher-contracts/tree/v3.5.0"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -3956,11 +3784,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-09-25T14:20:29+00:00"
-=======
-            "time": "2024-04-18T09:32:20+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/expression-language",
@@ -4471,7 +4295,6 @@
         },
         {
             "name": "symfony/http-client",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -4482,29 +4305,13 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-client/zipball/2ec49720a38a8041673ba4c42512bfd845218c56",
                 "reference": "2ec49720a38a8041673ba4c42512bfd845218c56",
-=======
-            "version": "v7.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/http-client.git",
-                "reference": "c30d91a1deac0dc3ed5e604683cf2e1dfc635b8a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/c30d91a1deac0dc3ed5e604683cf2e1dfc635b8a",
-                "reference": "c30d91a1deac0dc3ed5e604683cf2e1dfc635b8a",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
                 "psr/log": "^1|^2|^3",
                 "symfony/deprecation-contracts": "^2.5|^3",
-<<<<<<< HEAD
                 "symfony/http-client-contracts": "~3.4.3|^3.5.1",
-=======
-                "symfony/http-client-contracts": "^3.4.1",
->>>>>>> login-and-email-issue
                 "symfony/service-contracts": "^2.5|^3"
             },
             "conflict": {
@@ -4562,11 +4369,7 @@
                 "http"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/http-client/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/http-client/tree/v7.1.8"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -4582,7 +4385,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-27T11:52:45+00:00"
         },
         {
@@ -4597,22 +4399,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/c2f3ad828596624ca39ea40f83617ef51ca8bbf9",
                 "reference": "c2f3ad828596624ca39ea40f83617ef51ca8bbf9",
-=======
-            "time": "2024-11-13T13:40:27+00:00"
-        },
-        {
-            "name": "symfony/http-client-contracts",
-            "version": "v3.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/http-client-contracts.git",
-                "reference": "20414d96f391677bf80078aa55baece78b82647d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/20414d96f391677bf80078aa55baece78b82647d",
-                "reference": "20414d96f391677bf80078aa55baece78b82647d",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -4661,11 +4447,7 @@
                 "standards"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/http-client-contracts/tree/v3.5.1"
-=======
-                "source": "https://github.com/symfony/http-client-contracts/tree/v3.5.0"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -4681,7 +4463,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-25T12:02:18+00:00"
         },
         {
@@ -4696,22 +4477,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-foundation/zipball/82765842fb599c7ed839b650214680c7ee5779be",
                 "reference": "82765842fb599c7ed839b650214680c7ee5779be",
-=======
-            "time": "2024-04-18T09:32:20+00:00"
-        },
-        {
-            "name": "symfony/http-foundation",
-            "version": "v7.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "f4419ec69ccfc3f725a4de7c20e4e57626d10112"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/f4419ec69ccfc3f725a4de7c20e4e57626d10112",
-                "reference": "f4419ec69ccfc3f725a4de7c20e4e57626d10112",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -4759,11 +4524,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/http-foundation/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/http-foundation/tree/v7.1.8"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -4779,7 +4540,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-13T18:58:36+00:00"
         },
         {
@@ -4794,22 +4554,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-kernel/zipball/649d0e23c571344ef1153d4ffb2564f534b85a45",
                 "reference": "649d0e23c571344ef1153d4ffb2564f534b85a45",
-=======
-            "time": "2024-11-09T09:16:45+00:00"
-        },
-        {
-            "name": "symfony/http-kernel",
-            "version": "v7.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "33fef24e3dc79d6d30bf4936531f2f4bd2ca189e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/33fef24e3dc79d6d30bf4936531f2f4bd2ca189e",
-                "reference": "33fef24e3dc79d6d30bf4936531f2f4bd2ca189e",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -4894,11 +4638,7 @@
             "description": "Provides a structured process for converting a Request into a Response",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/http-kernel/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/http-kernel/tree/v7.1.8"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -4914,11 +4654,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-27T12:55:11+00:00"
-=======
-            "time": "2024-11-13T14:25:32+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/intl",
@@ -5166,7 +4902,6 @@
         },
         {
             "name": "symfony/messenger",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -5177,18 +4912,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/messenger/zipball/51e2b8b6a14b78ad7db60ef5f195ae893c16b9cc",
                 "reference": "51e2b8b6a14b78ad7db60ef5f195ae893c16b9cc",
-=======
-            "version": "v7.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/messenger.git",
-                "reference": "86d9aead6c40a56a528f2fb881a8be253efbbd1f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/messenger/zipball/86d9aead6c40a56a528f2fb881a8be253efbbd1f",
-                "reference": "86d9aead6c40a56a528f2fb881a8be253efbbd1f",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -5245,11 +4968,7 @@
             "description": "Helps applications send and receive messages to/from other applications or via message queues",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/messenger/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/messenger/tree/v7.1.8"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -5265,11 +4984,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-26T09:50:51+00:00"
-=======
-            "time": "2024-11-09T09:16:45+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/mime",
@@ -5594,7 +5309,6 @@
         },
         {
             "name": "symfony/options-resolver",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -5605,18 +5319,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/options-resolver/zipball/0f4099f5306a92487d13b2a4589068c36a93c447",
                 "reference": "0f4099f5306a92487d13b2a4589068c36a93c447",
-=======
-            "version": "v7.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "85e95eeede2d41cd146146e98c9c81d9214cae85"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/85e95eeede2d41cd146146e98c9c81d9214cae85",
-                "reference": "85e95eeede2d41cd146146e98c9c81d9214cae85",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -5654,11 +5356,7 @@
                 "options"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/options-resolver/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/options-resolver/tree/v7.1.6"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -5674,11 +5372,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-20T11:08:58+00:00"
-=======
-            "time": "2024-09-25T14:20:29+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/password-hasher",
@@ -6373,7 +6067,6 @@
         },
         {
             "name": "symfony/property-info",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -6384,18 +6077,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/property-info/zipball/e9a7b2a4984457c3849afd2b1a1ec7f2994cb1b5",
                 "reference": "e9a7b2a4984457c3849afd2b1a1ec7f2994cb1b5",
-=======
-            "version": "v7.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/property-info.git",
-                "reference": "3748f85f64351d282fd028e44309856f1d79142e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/3748f85f64351d282fd028e44309856f1d79142e",
-                "reference": "3748f85f64351d282fd028e44309856f1d79142e",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -6406,12 +6087,7 @@
             "conflict": {
                 "phpdocumentor/reflection-docblock": "<5.2",
                 "phpdocumentor/type-resolver": "<1.5.1",
-<<<<<<< HEAD
                 "symfony/dependency-injection": "<6.4"
-=======
-                "symfony/dependency-injection": "<6.4",
-                "symfony/serializer": "<6.4"
->>>>>>> login-and-email-issue
             },
             "require-dev": {
                 "phpdocumentor/reflection-docblock": "^5.2",
@@ -6454,11 +6130,7 @@
                 "validator"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/property-info/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/property-info/tree/v7.1.8"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -6474,11 +6146,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-27T09:50:41+00:00"
-=======
-            "time": "2024-11-09T07:07:11+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/rate-limiter",
@@ -6552,7 +6220,6 @@
         },
         {
             "name": "symfony/routing",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -6563,18 +6230,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/routing/zipball/a27bb8e0cc3ca4baf17159d053910c9736c3aa4c",
                 "reference": "a27bb8e0cc3ca4baf17159d053910c9736c3aa4c",
-=======
-            "version": "v7.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/routing.git",
-                "reference": "66a2c469f6c22d08603235c46a20007c0701ea0a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/routing/zipball/66a2c469f6c22d08603235c46a20007c0701ea0a",
-                "reference": "66a2c469f6c22d08603235c46a20007c0701ea0a",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -6626,11 +6281,7 @@
                 "url"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/routing/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/routing/tree/v7.1.6"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -6646,11 +6297,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-13T16:12:35+00:00"
-=======
-            "time": "2024-10-01T08:31:23+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/runtime",
@@ -6839,7 +6486,6 @@
         },
         {
             "name": "symfony/security-core",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -6850,18 +6496,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/security-core/zipball/294426c17d484f47a576ca092c132f3afba17a19",
                 "reference": "294426c17d484f47a576ca092c132f3afba17a19",
-=======
-            "version": "v7.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/security-core.git",
-                "reference": "6f3ffbfa1ece94f3a6d97e6e96e9994e9d1bbce2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-core/zipball/6f3ffbfa1ece94f3a6d97e6e96e9994e9d1bbce2",
-                "reference": "6f3ffbfa1ece94f3a6d97e6e96e9994e9d1bbce2",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -6918,11 +6552,7 @@
             "description": "Symfony Security Component - Core Library",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/security-core/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/security-core/tree/v7.1.6"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -6938,11 +6568,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-27T09:50:41+00:00"
-=======
-            "time": "2024-10-25T15:11:02+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/security-csrf",
@@ -7102,7 +6728,6 @@
         },
         {
             "name": "symfony/serializer",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -7113,18 +6738,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/serializer/zipball/39ec8beb1b8149c96785abad0e9ee390375a3e58",
                 "reference": "39ec8beb1b8149c96785abad0e9ee390375a3e58",
-=======
-            "version": "v7.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/serializer.git",
-                "reference": "6066de113408496e1e3d4bf9e21fb209d344768b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/6066de113408496e1e3d4bf9e21fb209d344768b",
-                "reference": "6066de113408496e1e3d4bf9e21fb209d344768b",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -7194,11 +6807,7 @@
             "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/serializer/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/serializer/tree/v7.1.8"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -7214,7 +6823,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-14T21:24:44+00:00"
         },
         {
@@ -7229,22 +6837,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/service-contracts/zipball/e53260aabf78fb3d63f8d79d69ece59f80d5eda0",
                 "reference": "e53260aabf78fb3d63f8d79d69ece59f80d5eda0",
-=======
-            "time": "2024-11-09T09:16:45+00:00"
-        },
-        {
-            "name": "symfony/service-contracts",
-            "version": "v3.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "bd1d9e59a81d8fa4acdcea3f617c581f7475a80f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/bd1d9e59a81d8fa4acdcea3f617c581f7475a80f",
-                "reference": "bd1d9e59a81d8fa4acdcea3f617c581f7475a80f",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -7298,11 +6890,7 @@
                 "standards"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/service-contracts/tree/v3.5.1"
-=======
-                "source": "https://github.com/symfony/service-contracts/tree/v3.5.0"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -7318,11 +6906,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-09-25T14:20:29+00:00"
-=======
-            "time": "2024-04-18T09:32:20+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/stimulus-bundle",
@@ -7638,7 +7222,6 @@
         },
         {
             "name": "symfony/translation-contracts",
-<<<<<<< HEAD
             "version": "v3.5.1",
             "source": {
                 "type": "git",
@@ -7649,18 +7232,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/4667ff3bd513750603a09c8dedbea942487fb07c",
                 "reference": "4667ff3bd513750603a09c8dedbea942487fb07c",
-=======
-            "version": "v3.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/translation-contracts.git",
-                "reference": "b9d2189887bb6b2e0367a9fc7136c5239ab9b05a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/b9d2189887bb6b2e0367a9fc7136c5239ab9b05a",
-                "reference": "b9d2189887bb6b2e0367a9fc7136c5239ab9b05a",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -7709,11 +7280,7 @@
                 "standards"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/translation-contracts/tree/v3.5.1"
-=======
-                "source": "https://github.com/symfony/translation-contracts/tree/v3.5.0"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -7729,7 +7296,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-09-25T14:20:29+00:00"
         },
         {
@@ -7744,22 +7310,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/67ea8a59432307efb0fdcae0d8512e7c4a9e4c01",
                 "reference": "67ea8a59432307efb0fdcae0d8512e7c4a9e4c01",
-=======
-            "time": "2024-04-18T09:32:20+00:00"
-        },
-        {
-            "name": "symfony/twig-bridge",
-            "version": "v7.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/twig-bridge.git",
-                "reference": "535ab0be4fc563b2bc5fc0cc9e388626d226c63f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/535ab0be4fc563b2bc5fc0cc9e388626d226c63f",
-                "reference": "535ab0be4fc563b2bc5fc0cc9e388626d226c63f",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -7839,11 +7389,7 @@
             "description": "Provides integration for Twig with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/twig-bridge/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/twig-bridge/tree/v7.1.8"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -7859,11 +7405,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-25T12:02:18+00:00"
-=======
-            "time": "2024-11-10T02:47:09+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/twig-bundle",
@@ -8131,7 +7673,6 @@
         },
         {
             "name": "symfony/validator",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -8142,18 +7683,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/validator/zipball/ff71d77da404c700f8b05ba426eb9e6f8d22771b",
                 "reference": "ff71d77da404c700f8b05ba426eb9e6f8d22771b",
-=======
-            "version": "v7.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/validator.git",
-                "reference": "85a90c0a4ab0d10c118d3cdf39115e00d9cca7d0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/85a90c0a4ab0d10c118d3cdf39115e00d9cca7d0",
-                "reference": "85a90c0a4ab0d10c118d3cdf39115e00d9cca7d0",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -8221,11 +7750,7 @@
             "description": "Provides tools to validate values",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/validator/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/validator/tree/v7.1.8"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -8241,11 +7766,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-27T09:50:41+00:00"
-=======
-            "time": "2024-11-08T15:46:42+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/var-dumper",
@@ -8562,11 +8083,7 @@
         },
         {
             "name": "twig/extra-bundle",
-<<<<<<< HEAD
             "version": "v3.16.0",
-=======
-            "version": "v3.15.0",
->>>>>>> login-and-email-issue
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/twig-extra-bundle.git",
@@ -8624,11 +8141,7 @@
                 "twig"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/twigphp/twig-extra-bundle/tree/v3.16.0"
-=======
-                "source": "https://github.com/twigphp/twig-extra-bundle/tree/v3.15.0"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -8644,7 +8157,6 @@
         },
         {
             "name": "twig/twig",
-<<<<<<< HEAD
             "version": "v3.16.0",
             "source": {
                 "type": "git",
@@ -8655,18 +8167,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/twigphp/Twig/zipball/475ad2dc97d65d8631393e721e7e44fb544f0561",
                 "reference": "475ad2dc97d65d8631393e721e7e44fb544f0561",
-=======
-            "version": "v3.15.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "2d5b3964cc21d0188633d7ddce732dc8e874db02"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/2d5b3964cc21d0188633d7ddce732dc8e874db02",
-                "reference": "2d5b3964cc21d0188633d7ddce732dc8e874db02",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -8677,10 +8177,7 @@
                 "symfony/polyfill-php81": "^1.29"
             },
             "require-dev": {
-<<<<<<< HEAD
                 "phpstan/phpstan": "^2.0",
-=======
->>>>>>> login-and-email-issue
                 "psr/container": "^1.0|^2.0",
                 "symfony/phpunit-bridge": "^5.4.9|^6.4|^7.0"
             },
@@ -8724,11 +8221,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-<<<<<<< HEAD
                 "source": "https://github.com/twigphp/Twig/tree/v3.16.0"
-=======
-                "source": "https://github.com/twigphp/Twig/tree/v3.15.0"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -8740,11 +8233,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-29T08:27:05+00:00"
-=======
-            "time": "2024-11-17T15:59:19+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "webmozart/assert",
@@ -10703,7 +10192,6 @@
         },
         {
             "name": "symfony/dom-crawler",
-<<<<<<< HEAD
             "version": "v7.1.9",
             "source": {
                 "type": "git",
@@ -10714,18 +10202,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/fd006641cf28ab702684b8cb0645bea95bc1691a",
                 "reference": "fd006641cf28ab702684b8cb0645bea95bc1691a",
-=======
-            "version": "v7.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "794ddd5481ba15d8a04132c95e211cd5656e09fb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/794ddd5481ba15d8a04132c95e211cd5656e09fb",
-                "reference": "794ddd5481ba15d8a04132c95e211cd5656e09fb",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -10763,11 +10239,7 @@
             "description": "Eases DOM navigation for HTML and XML documents",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/dom-crawler/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/dom-crawler/tree/v7.1.6"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -10783,11 +10255,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-13T15:09:09+00:00"
-=======
-            "time": "2024-10-25T15:11:02+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "symfony/maker-bundle",
@@ -10883,7 +10351,6 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-<<<<<<< HEAD
             "version": "v7.2.0",
             "source": {
                 "type": "git",
@@ -10894,18 +10361,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/2bbde92ab25a0e2c88160857af7be9db5da0d145",
                 "reference": "2bbde92ab25a0e2c88160857af7be9db5da0d145",
-=======
-            "version": "v7.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "c6b9d8f52d3e276bedb49612aa4a2a046171287f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/c6b9d8f52d3e276bedb49612aa4a2a046171287f",
-                "reference": "c6b9d8f52d3e276bedb49612aa4a2a046171287f",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -10925,13 +10380,8 @@
             "type": "symfony-bridge",
             "extra": {
                 "thanks": {
-<<<<<<< HEAD
                     "url": "https://github.com/sebastianbergmann/phpunit",
                     "name": "phpunit/phpunit"
-=======
-                    "name": "phpunit/phpunit",
-                    "url": "https://github.com/sebastianbergmann/phpunit"
->>>>>>> login-and-email-issue
                 }
             },
             "autoload": {
@@ -10963,11 +10413,7 @@
             "description": "Provides utilities for PHPUnit, especially user deprecation notices management",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/phpunit-bridge/tree/v7.2.0"
-=======
-                "source": "https://github.com/symfony/phpunit-bridge/tree/v7.1.6"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -10983,7 +10429,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-13T16:15:23+00:00"
         },
         {
@@ -10998,22 +10443,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/web-profiler-bundle/zipball/6f26474e0e8ff746cb0abaddf9ebe0b067172fb1",
                 "reference": "6f26474e0e8ff746cb0abaddf9ebe0b067172fb1",
-=======
-            "time": "2024-09-25T14:20:29+00:00"
-        },
-        {
-            "name": "symfony/web-profiler-bundle",
-            "version": "v7.1.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/web-profiler-bundle.git",
-                "reference": "13d97a9acb23663550495fa2480e8cc95033ad61"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/web-profiler-bundle/zipball/13d97a9acb23663550495fa2480e8cc95033ad61",
-                "reference": "13d97a9acb23663550495fa2480e8cc95033ad61",
->>>>>>> login-and-email-issue
                 "shasum": ""
             },
             "require": {
@@ -11065,11 +10494,7 @@
                 "dev"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/web-profiler-bundle/tree/v7.1.9"
-=======
-                "source": "https://github.com/symfony/web-profiler-bundle/tree/v7.1.7"
->>>>>>> login-and-email-issue
             },
             "funding": [
                 {
@@ -11085,11 +10510,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-11-19T10:11:44+00:00"
-=======
-            "time": "2024-11-05T07:52:02+00:00"
->>>>>>> login-and-email-issue
         },
         {
             "name": "theseer/tokenizer",

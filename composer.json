@@ -37,11 +37,7 @@
         "symfony/property-access": "7.1.*",
         "symfony/property-info": "7.1.*",
         "symfony/rate-limiter": "7.1.*",
-<<<<<<< HEAD
-        "symfony/runtime": "7.1.*",
-=======
         "symfony/runtime": "*",
->>>>>>> login-and-email-issue
         "symfony/security-bundle": "7.1.*",
         "symfony/serializer": "7.1.*",
         "symfony/stimulus-bundle": "^2.19",
