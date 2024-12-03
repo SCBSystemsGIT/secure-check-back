@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CreateQRController extends AbstractController
 {
-
     public function __construct(
         private Helpers $Helpers,
         private EntityManagerInterface $em,
@@ -30,37 +29,23 @@ class CreateQRController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $qr = new QRUser();
-        $admin = $this->getUser();
-        if(empty($admin)){
-            return $this->json([
-                "message" => "N'est pas autorisé a éffectué cette action"
-            ], 404);
-        }
 
         $user = $this
-                    ->em
-                    ->getRepository(User::class)
-                    ->findOneBy(['email' => $data['email']]);
+                        ->em
+                        ->getRepository(User::class)
+                        ->findOneBy(['email' => $data['email']]);
+
         if (empty($user)) {
             return $this->json([
                 "message" => "le mail n'existe pas"
             ], 404);
-        }
-        if(!$admin->getCompany()->getSlug() == "scb"){
-            
-            if($user->getCompany()->getSlug() != $admin->getCompany()->getSlug()){
-                return  $this->json([
-                    "message"=>"L'utilisateur doit etre de votre entreprise"
-                ]);
-            }
-            
         }
         $qr->setEmail($data['email']);  
         $uidn = uniqid();
         $qr->setUidn(uidn: $uidn);
         $qr->setType($data["type"]);
 
-        if($data["type"] == 'temp'){
+        if($data["type"] == 'temporaire'){
             $qr->setType($data['date_exp']);
         }
 
