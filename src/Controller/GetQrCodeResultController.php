@@ -111,7 +111,7 @@ class GetQrCodeResultController extends AbstractController
         $this->em->flush();
     }
 
-    public function updateCheckIn($qr)
+    /*public function updateCheckIn($qr)
     {
         $checkIn = $this->checkInsRepo->findOneBy(['qr_code' => $qr]);
         $checkIn->setCheckOutTime(new DateTimeImmutable());
@@ -121,5 +121,34 @@ class GetQrCodeResultController extends AbstractController
         $qr->setUsed(true);
         $this->em->persist($qr);
         $this->em->flush();
+    }*/
+    public function updateCheckIn($qr)
+    {
+        $checkIn = $this->checkInsRepo->findOneBy(['qr_code' => $qr]);
+
+        if (!$checkIn) {
+            throw new \Exception('Check-in not found for the provided QR code.');
+        }
+
+        if ($qr->getVisitor()->getVisitorType() === 1) {
+            if ($checkIn->getCheckOutTime() !== null) {
+                $checkIn->setCheckInTime(new DateTimeImmutable());  
+                $checkIn->setCheckOutTime(null); 
+            } else {
+                $checkIn->setCheckOutTime(new DateTimeImmutable());
+            }
+        } else {
+            if ($checkIn->getCheckOutTime() === null) {
+                $checkIn->setCheckOutTime(new DateTimeImmutable());
+            } else {
+                throw new \Exception('Temporary QR code has already been checked out.');
+            }
+
+            $qr->setUsed(true);  
+            $this->em->persist($qr);
+        }
+
+        $this->em->persist($checkIn); 
+        $this->em->flush(); 
     }
 }

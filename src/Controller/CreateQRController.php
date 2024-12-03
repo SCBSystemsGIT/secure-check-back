@@ -47,7 +47,7 @@ class CreateQRController extends AbstractController
         $qr->setUidn(uidn: $uidn);
         $qr->setType($data["type"]);
 
-        if($data["type"] == 'temp'){
+        if($data["type"] == 'temporaire'){
             $qr->setType($data['date_exp']);
         }
 

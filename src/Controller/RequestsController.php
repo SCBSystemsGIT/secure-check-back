@@ -245,7 +245,7 @@ class RequestsController extends AbstractController
                 $qrCode->setType('Temporaire');
                 $qrCode->setExpirationDate(new \DateTime('+1 day'));
             } 
-            $qrCode->setExpirationDate(new \DateTime('+1 day')); // Set expiration date if applicable
+            //$qrCode->setExpirationDate(new \DateTime('+1 day')); // Set expiration date if applicable
             $qrCode->setStatus(1);
             $qrCode->setCreatedAt(new \DateTimeImmutable());
             $qrCode->setUpdatedAt(new \DateTimeImmutable());
