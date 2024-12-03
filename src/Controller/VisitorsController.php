@@ -60,7 +60,7 @@ class VisitorsController extends AbstractController
     }
 
     /**  
-     * Enregistrement d'un visiteur
+     * Enregistrement d'un visiteur"
      * @param Request $request
      * @return JsonResponse
      */
