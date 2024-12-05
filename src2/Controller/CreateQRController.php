@@ -29,7 +29,6 @@ class CreateQRController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $qr = new QRUser();
-
         $user = $this
                         ->em
                         ->getRepository(User::class)
@@ -47,7 +46,7 @@ class CreateQRController extends AbstractController
         $qr->setType($data["type"]);
 
         if($data["type"] == 'temporaire'){
-            $qr->setType($data['type']);
+            $qr->setType($data['date_exp']);
         }
 
         $this->em->persist($qr);

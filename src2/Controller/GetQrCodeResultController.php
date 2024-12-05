@@ -49,6 +49,7 @@ class GetQrCodeResultController extends AbstractController
             );
         }
 
+
         $currentDateTime = new DateTime();
         if ($currentDateTime > $qr->getExpirationDate()) {
             return $this->json(
