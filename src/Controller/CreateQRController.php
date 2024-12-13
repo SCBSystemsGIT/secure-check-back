@@ -25,7 +25,7 @@ class CreateQRController extends AbstractController
         // $this->Helpers = $Helpers;
     }   
 
-    #[Route('/api/create-qr', name: 'app_create_q_r')]
+    #[Route('/api/', name: 'app_create_q_r')]
     public function __invoke(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
@@ -46,10 +46,11 @@ class CreateQRController extends AbstractController
         $uidn = uniqid();
         $qr->setUidn(uidn: $uidn);
         $qr->setType($data["type"]);
+        $qr->setTest('122222222');
 
-        if($data["type"] == 'temporaire'){
+        /*if($data["type"] == 'temporaire'){
             $qr->setType($data['date_exp']);
-        }
+        }*/
 
         $this->em->persist($qr);
         $this->em->flush();

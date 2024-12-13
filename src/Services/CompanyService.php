@@ -130,7 +130,7 @@ class CompanyService extends AbstractController
     public function all()
     {
         $companies = $this->entityManager->getRepository(Company::class)->findBy([], ['createdAt' => 'DESC']);
-
+        
         return $this->json(
             [
                 'data' => $companies

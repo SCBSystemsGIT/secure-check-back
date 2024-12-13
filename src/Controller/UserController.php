@@ -44,20 +44,28 @@ class UserController extends AbstractController
     #[Route('/api/user/list', name: 'app_user', methods: ['GET'])]
     public function userList(EntityManagerInterface $entityManager): Response
     {
-        $datas = $entityManager->getRepository(User::class)->findAll(array("create_at" => "DESC"));
+        $user = $this->getUser();
+        //dd($userId);
+        $userId = $user->getId();
+        $queryBuilder = $entityManager->getRepository(User::class)->createQueryBuilder('u');
+        $queryBuilder->where('u.id != :userId')
+             ->orderBy('u.create_at', 'ASC')
+             ->setParameter('userId', $userId);
+        $datas = $queryBuilder->getQuery()->getResult();
         return $this->json($datas, 200, [], [
             'groups' => 'users'
         ]);
     }
-
-
     /**
      * @return Response
      **/
     #[Route('/api/user/list/{companySlug}', name: 'app_user_by_comp', methods: ['GET'])]
     public function userListComp(EntityManagerInterface $entityManager, $companySlug): Response
     {
-
+        $user = $this->getUser();
+        //dd($user);
+        $userId = $user->getId();
+        //dd($userId);
         $company = $entityManager->getRepository(Company::class)
             ->findOneBy(['slug' => $companySlug]);
 
@@ -67,7 +75,13 @@ class UserController extends AbstractController
             ], 404);
         }
 
-        $datas = $entityManager->getRepository(User::class)->findBy(['company' => $company], array("create_at" => "DESC"));
+        $queryBuilder = $entityManager->getRepository(User::class)->createQueryBuilder('u');
+        $queryBuilder->where('u.company = :company')
+             ->andWhere('u.id != :userId')
+             ->setParameter('company', $company)
+             ->setParameter('userId', $userId)
+             ->orderBy('u.create_at', 'DESC');
+        $datas = $queryBuilder->getQuery()->getResult();
         return $this->json($datas, 200, [], [
             'groups' => 'users'
         ]);

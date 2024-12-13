@@ -289,7 +289,7 @@ class Helpers extends AbstractController
                 ->size(300)
                 ->build();
 
-            if($type == 'perm'){
+            if($type == 'permanent'){
                 $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';
             }else{
                 $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';

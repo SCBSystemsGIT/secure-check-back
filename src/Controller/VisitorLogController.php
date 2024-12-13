@@ -42,8 +42,9 @@ public function getVisitorLog(EntityManagerInterface $entityManager): JsonRespon
     $data = [];
     foreach ($datas as $checkIn) {
         $data[] = [
-            'id' => $checkIn->getId(),
+            //'id' => $checkIn->getId(),
             'visitor_id' => $checkIn->getVisitor()->getId(),
+            'visitor_email' => $checkIn->getVisitor()->getEmail(),
             //->getVisitor()->getId(),
             //'qr_code_id' => $checkIn->getQrCodeId(),
             'check_in_time' => $checkIn->getCheckInTime() ? $checkIn->getCheckInTime()->format('Y-m-d H:i:s') : null,
