@@ -106,18 +106,18 @@ class UserController extends AbstractController
             }
 
             // Define required fields
-            $requiredFields = ['name', 'firstname', 'email', 'password', 'role', 'title', 'department_id', 'company_id'];
+            $requiredFields = ['name', 'firstname', 'email', 'password', 'role', 'title', 'company_id'];
 
             // Validate required fields using the helper function
             $missingFields = $this->Helpers->validateRequiredFields($data, $requiredFields);
             if (!empty($missingFields)) {
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
-
+            $departmentId =1;
             // Récupérer le département
             $department = $this->entityManager
                 ->getRepository(Departements::class)
-                ->find($data["department_id"]);
+                ->find($departmentId);
             // ->findOneBy(["name"=>$data["department_id"]]);
             if (!$department) {
                 throw new \InvalidArgumentException('Invalid department_id');

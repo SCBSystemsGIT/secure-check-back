@@ -99,11 +99,14 @@ class GetQrCodeResultController extends AbstractController
 
     public function saveCheckIn($qr)
     {
+        $created_date = $qr->getCreatedAt();
+        
+        //echo $created_date; die;
         $checkIn = new CheckIns();
         $checkIn->setCheckInTime(new DateTimeImmutable());
         $checkIn->setVisitor($qr->getVisitor());
         $checkIn->setQrCode($qr);
-        $checkIn->setCreatedAt(new DateTimeImmutable());
+        $checkIn->setCreatedAt($created_date);
 
         $qr->addCheckIn($checkIn);
         $this->em->persist($checkIn);

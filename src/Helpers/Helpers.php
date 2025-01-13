@@ -306,6 +306,31 @@ class Helpers extends AbstractController
         }
     }
 
+    public function generateCompanyQR($slug, $data)
+    {
+        try {
+
+            $qrCode = Builder::create()
+                ->writer(new PngWriter())
+                ->data("https://www.securecheck.info/$slug")
+                ->encoding(encoding: new Encoding('UTF-8'))
+                ->size(300)
+                ->build();
+
+         
+                $filePath = 'qrcode-company/qrcode-' . $slug . '.png';
+            
+            $qrCode->saveToFile($filePath);
+
+            return $filePath;
+
+        } catch (\Exception $e) {
+
+            throw new \Exception('QR code generation failed: ' . $e->getMessage());
+            
+        }
+    }
+
     public function sendEmail(
         $to,
         $subject,
