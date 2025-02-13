@@ -30,11 +30,11 @@ class Visitors
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['visitor', 'evenements'])]
+    #[Groups(['visitor', 'evenements', 'request'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['visitor'])]
+    #[Groups(['visitor' , 'request'])]
     private ?string $contact = null;
 
     #[ORM\Column(length: 255)]
@@ -83,6 +83,30 @@ class Visitors
 
     #[ORM\ManyToOne(inversedBy: 'visitors')]
     private ?Company $company = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor'])]
+    private ?string $state = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor'])]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor'])]
+    private ?string $zipcode = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor'])]
+    private ?string $country = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor'])]
+    private ?string $request_date = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor'])]
+    private ?string $request_time = null;
 
     public function __construct()
     {
@@ -164,6 +188,78 @@ class Visitors
     public function setAddress(string $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(string $state): static
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(string $country): static
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getZipCode(): ?string
+    {
+        return $this->zipcode;
+    }
+
+    public function setZipCode(string $zipcode): static
+    {
+        $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getRequestDate(): ?string
+    {
+        return $this->request_date;
+    }
+
+    public function setRequestDate(string $request_date): static
+    {
+        $this->request_date = $request_date;
+
+        return $this;
+    }
+
+    public function getRequestTime(): ?string
+    {
+        return $this->request_time;
+    }
+
+    public function setRequestTime(string $request_time): static
+    {
+        $this->request_time = $request_time;
 
         return $this;
     }

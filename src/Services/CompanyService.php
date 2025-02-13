@@ -35,7 +35,18 @@ class CompanyService extends AbstractController
     {
         $company = new Company();
         $company->setName(name: $data['name'])
-            ->setDescription($data["description"])
+            ->setAddress($data["address"])
+            ->setIdNumber($data["id_number"])
+            ->setPointContact($data["point_contact"])
+            ->setEmail($data["email"])
+            ->setPhoneNumber($data["phone_number"])
+            ->setCompanyField($data["company_field"])
+            ->setCountry($data["country"])
+            ->setCity($data["city"])
+            ->setState($data["state"])
+            ->setTitle($data["title"])
+            ->setZipcode($data["zipcode"])
+            ->setNumberOfEmployee($data["number_of_employee"])
             ->generateSlug($this->slugger)
             ->setCreatedAt(new DateTimeImmutable())
         ;
@@ -90,15 +101,35 @@ class CompanyService extends AbstractController
         ], status: 200, headers: [], context: ['groups' => 'company']);
     }
 
-    public function update($data, $company)
+    public function update($data, $company, $file)
     {
+       
         if (!$company) {
             return new JsonResponse([
                 'message' => "$this->resourceName introuvable"
             ], Response::HTTP_NOT_FOUND);
         }
+ 
+        $company->setName(name: $data['name'])
+        ->setAddress($data["address"])
+        ->setIdNumber($data["id_number"])
+        ->setPointContact($data["point_contact"])
+        ->setEmail($data["email"])
+        ->setPhoneNumber($data["phone_number"])
+        ->setCompanyField($data["company_field"])
+        ->setCountry($data["country"])
+        ->setCity($data["city"])
+        ->setZipcode($data["zipcode"])
+        ->setNumberOfEmployee($data["number_of_employee"])
+        ->generateSlug($this->slugger)
+            ->setCreatedAt(new DateTimeImmutable())
+        ;
+  
+        if (!empty($file)) {
+            $data['logo'] = $this->fileUploader->upload($file, "logo");
+            $company->setLogo($data['logo']);
+        }
 
-        $company->setName($data['name'])->setDescription($data['description']);
         $company->generateSlug(
             $this->slugger
         );
@@ -130,7 +161,7 @@ class CompanyService extends AbstractController
     public function all()
     {
         $companies = $this->entityManager->getRepository(Company::class)->findBy([], ['createdAt' => 'DESC']);
-
+        
         return $this->json(
             [
                 'data' => $companies

@@ -44,20 +44,29 @@ class UserController extends AbstractController
     #[Route('/api/user/list', name: 'app_user', methods: ['GET'])]
     public function userList(EntityManagerInterface $entityManager): Response
     {
-        $datas = $entityManager->getRepository(User::class)->findAll(array("create_at" => "DESC"));
+        $user = $this->getUser();
+        // dd($userId);
+        $userId = $user->getId();
+        $queryBuilder = $entityManager->getRepository(User::class)->createQueryBuilder('u');
+        $queryBuilder->where('u.id != :userId')
+             ->orderBy('u.create_at', 'ASC')
+             ->setParameter('userId', $userId);
+        $datas = $queryBuilder->getQuery()->getResult();
         return $this->json($datas, 200, [], [
             'groups' => 'users'
         ]);
     }
-
-
+    
     /**
      * @return Response
      **/
     #[Route('/api/user/list/{companySlug}', name: 'app_user_by_comp', methods: ['GET'])]
     public function userListComp(EntityManagerInterface $entityManager, $companySlug): Response
     {
-
+        $user = $this->getUser();
+        //dd($user);
+        $userId = $user->getId();
+        //dd($userId);
         $company = $entityManager->getRepository(Company::class)
             ->findOneBy(['slug' => $companySlug]);
 
@@ -67,7 +76,13 @@ class UserController extends AbstractController
             ], 404);
         }
 
-        $datas = $entityManager->getRepository(User::class)->findBy(['company' => $company], array("create_at" => "DESC"));
+        $queryBuilder = $entityManager->getRepository(User::class)->createQueryBuilder('u');
+        $queryBuilder->where('u.company = :company')
+             ->andWhere('u.id != :userId')
+             ->setParameter('company', $company)
+             ->setParameter('userId', $userId)
+             ->orderBy('u.create_at', 'DESC');
+        $datas = $queryBuilder->getQuery()->getResult();
         return $this->json($datas, 200, [], [
             'groups' => 'users'
         ]);
@@ -92,18 +107,18 @@ class UserController extends AbstractController
             }
 
             // Define required fields
-            $requiredFields = ['name', 'firstname', 'email', 'password', 'role', 'title', 'department_id', 'company_id'];
+            $requiredFields = ['name', 'firstname', 'email', 'password', 'role', 'title', 'company_id'];
 
             // Validate required fields using the helper function
             $missingFields = $this->Helpers->validateRequiredFields($data, $requiredFields);
             if (!empty($missingFields)) {
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
-
+            $departmentId =1;
             // Récupérer le département
             $department = $this->entityManager
                 ->getRepository(Departements::class)
-                ->find($data["department_id"]);
+                ->find($departmentId);
             // ->findOneBy(["name"=>$data["department_id"]]);
             if (!$department) {
                 throw new \InvalidArgumentException('Invalid department_id');

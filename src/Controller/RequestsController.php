@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Company;
+use App\Entity\User;
 use App\Entity\QRCodes;
 use App\Entity\Requests;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use App\Helpers\Helpers;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class RequestsController extends AbstractController
 {
@@ -70,13 +72,27 @@ class RequestsController extends AbstractController
     #[Route('/api/requests/list/{companySlug}', name: 'app_requests_by_comp', methods: ['GET'])]
     public function visitorsListByComp(EntityManagerInterface $entityManager, $companySlug): Response
     {
-        $company = $entityManager->getRepository(Company::class)
+        
+        $user = $this->getUser();
+        $roles =  $user->getRoles();
+        if (in_array('ROLE_SecureCheck', $roles)) {
+            $datas = $entityManager->getRepository(Requests::class)->findBy(
+                [],
+                ["created_at" => "DESC"]
+            );
+            return $this->json($datas, 200, [], [
+                'groups' => 'request'
+            ]);
+        }
+        else
+        {
+            $company = $entityManager->getRepository(Company::class)
             ->findOneBy(['slug' => $companySlug]);
-
-        if (empty($company)) {
-            return $this->json([
-                "error" => 'not found company',
-            ], 404);
+            if (empty($company)) {
+                return $this->json([
+                    "error" => 'not found company',
+                ], 404);
+            }
         }
 
         $finalDatas = [];
@@ -114,7 +130,7 @@ class RequestsController extends AbstractController
             }
 
             // Define required fields
-            $requiredFields = ['host'];
+            $requiredFields = ['host', 'reason'];
 
             // Validate required fields using the helper function
             $missingFields = $this->Helpers->validateRequiredFields($data, $requiredFields);
@@ -159,6 +175,7 @@ class RequestsController extends AbstractController
             $request_datas->setUser($user);
             $request_datas->setVisitor($visiteur);
             $request_datas->setHost($data['host']);
+            $request_datas->setHost($data['reason']);
             $request_datas->setRequestDate(new \DateTime());
             $request_datas->setCreatedAt(new \DateTimeImmutable());
 

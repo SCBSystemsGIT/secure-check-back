@@ -289,11 +289,36 @@ class Helpers extends AbstractController
                 ->size(300)
                 ->build();
 
-            if($type == 'perm'){
+            if($type == 'permanent'){
                 $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';
             }else{
                 $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';
             }
+            
+            $qrCode->saveToFile($filePath);
+
+            return $filePath;
+
+        } catch (\Exception $e) {
+
+            throw new \Exception('QR code generation failed: ' . $e->getMessage());
+            
+        }
+    }
+
+    public function generateCompanyQR($slug, $data)
+    {
+        try {
+
+            $qrCode = Builder::create()
+                ->writer(new PngWriter())
+                ->data("https://www.securecheck.info/$slug")
+                ->encoding(encoding: new Encoding('UTF-8'))
+                ->size(300)
+                ->build();
+
+         
+                $filePath = 'qrcode-company/qrcode-' . $slug . '.png';
             
             $qrCode->saveToFile($filePath);
 
@@ -320,11 +345,13 @@ class Helpers extends AbstractController
 
         // Envoyer l'email avec l'adresse correcte
         $uidn = $data['uidn'];
+        $qrCodeUrl = $this->getParameter('domain_name') . "/qrcode/qrcode-$uidn.png";
         $email = (new Email())
             ->from('noreply@express54.org')
             ->to($to)
             ->subject($subject)
-            ->html($body);
+            ->html($body)
+            ->attachFromPath($qrCodeUrl, 'qrcode.png', 'image/png');
 
         //->attachFromPath("http://192.168.1.3:9999/qrcode/qrcode-$uidn.png", 'qrc-code', 'image/png');
 

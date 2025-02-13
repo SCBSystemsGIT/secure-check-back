@@ -60,7 +60,7 @@ class VisitorsController extends AbstractController
     }
 
     /**  
-     * Enregistrement d'un visiteur"
+     * Enregistrement d'un visiteur
      * @param Request $request
      * @return JsonResponse
      */
@@ -111,8 +111,14 @@ class VisitorsController extends AbstractController
             $visitor->setContact($data['contact']);
             $visitor->setAddress($data['address']);
             $visitor->setOrganisationName(  $data['organisation_name']);
-            $visitor->setVisitorType((int) $data['visitor_type']);
+            $visitor->setVisitorType(!empty($data['visitor_type']) ? (int) $data['visitor_type'] : 2);
             $visitor->setIdNumber($data['id_number']);
+            $visitor->setState($data['state']);
+            $visitor->setCountry($data['country']);
+            $visitor->setZipCode($data['zipcode']);
+            $visitor->setCity($data['city']);
+            $visitor->setRequestDate($data['request_date']);
+            $visitor->setRequestTime($data['request_time']);
             $visitor->setCreatedAt(new \DateTimeImmutable());
             $visitor->setUpdatedAt(new \DateTimeImmutable());
 

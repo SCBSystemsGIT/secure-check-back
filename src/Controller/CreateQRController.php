@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CreateQRController extends AbstractController
 {
+
     public function __construct(
         private Helpers $Helpers,
         private EntityManagerInterface $em,
@@ -40,14 +41,19 @@ class CreateQRController extends AbstractController
                 "message" => "le mail n'existe pas"
             ], 404);
         }
-        $qr->setEmail($data['email']);  
+
+        $qr->setEmail($data['email']); 
+        $qr->setFirstName($data['firstname']); 
+        $qr->setLastName($data['lastname']);
+        $qr->setContact($data['contact']);   
         $uidn = uniqid();
         $qr->setUidn(uidn: $uidn);
         $qr->setType($data["type"]);
+       
 
-        if($data["type"] == 'temporaire'){
+        /*if($data["type"] == 'temporaire'){
             $qr->setType($data['date_exp']);
-        }
+        }*/
 
         $this->em->persist($qr);
         $this->em->flush();
@@ -64,6 +70,7 @@ class CreateQRController extends AbstractController
             ]
         ], Response::HTTP_OK);
     }
+
 
     private function sendEmail(MailerInterface $mailer, $to): Response
     {
