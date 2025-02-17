@@ -23,7 +23,7 @@ class Company
     #[Groups(['evenements',"company"])]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['evenements',"company"])]
     private ?string $description = null;
 

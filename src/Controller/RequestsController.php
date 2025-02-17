@@ -100,13 +100,11 @@ class RequestsController extends AbstractController
             [],
             ["created_at" => "DESC"]
         );
-
         foreach ($datas as $data) {
             if ($data->getVisitor()?->getCompany()?->getSlug() == $company->getSlug()) {
                 array_push($finalDatas, $data);
             }
         }
-
         return $this->json($finalDatas, 200, [], [
             'groups' => 'request'
         ]);
@@ -130,7 +128,7 @@ class RequestsController extends AbstractController
             }
 
             // Define required fields
-            $requiredFields = ['host', 'reason'];
+            $requiredFields = ['host'];
 
             // Validate required fields using the helper function
             $missingFields = $this->Helpers->validateRequiredFields($data, $requiredFields);
@@ -175,7 +173,7 @@ class RequestsController extends AbstractController
             $request_datas->setUser($user);
             $request_datas->setVisitor($visiteur);
             $request_datas->setHost($data['host']);
-            $request_datas->setHost($data['reason']);
+            $request_datas->setReason($data['reason']);
             $request_datas->setRequestDate(new \DateTime());
             $request_datas->setCreatedAt(new \DateTimeImmutable());
 

@@ -89,6 +89,7 @@ class EvenementsController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
+            //dd($data);
             if ($data === null) {
                 throw new \InvalidArgumentException('Invalid JSON data');
             }
