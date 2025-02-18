@@ -114,6 +114,19 @@ class UserController extends AbstractController
             if (!empty($missingFields)) {
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
+
+            // Check if email already exists
+            $existingUser = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['email' => $data['email'], 'company' => $data['company_id']]);
+
+            if ($existingUser) {
+                return $this->json([
+                    'status' => 'error',
+                    'message' => 'Cet email est déjà utilisé dans la même entreprise'
+                ], Response::HTTP_CONFLICT); // 409 Conflict response
+            }
+            
             $departmentId =1;
             // Récupérer le département
             $department = $this->entityManager

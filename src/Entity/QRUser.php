@@ -34,6 +34,9 @@ class QRUser
     #[ORM\Column(length: 255)]
     private ?string $contact = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,7 +89,17 @@ class QRUser
 
         return $this;
     }
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
 
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
+    }
     public function getUidn(): ?string
     {
         return $this->uidn;

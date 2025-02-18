@@ -312,7 +312,8 @@ class Helpers extends AbstractController
 
             $qrCode = Builder::create()
                 ->writer(new PngWriter())
-                ->data("https://www.securecheck.info/$slug")
+                #->data("https://www.securecheck.info/$slug")
+                ->data("127.0.0.0:8000/{$slug}")
                 ->encoding(encoding: new Encoding('UTF-8'))
                 ->size(300)
                 ->build();

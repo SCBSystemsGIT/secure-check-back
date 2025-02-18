@@ -31,7 +31,9 @@ class UserInfoController extends AbstractController
             'id' => $user->getId(),
             'username' => $user->getUserIdentifier(), // Or any other property you need
             'roles' => $user->getRoles(),
+            'company_id' => $user->getCompany()->getId(),
             'company' => $user->getCompany()->getSlug() ?? "scb"
+            
         ];
 
         return new JsonResponse($userInfo);

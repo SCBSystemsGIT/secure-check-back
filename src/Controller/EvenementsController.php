@@ -100,6 +100,7 @@ class EvenementsController extends AbstractController
                 'company_id',
                 'location',
                 // 'departement_id', 
+                'address_name',
                 'date_event',
                 'time_event'
             ];

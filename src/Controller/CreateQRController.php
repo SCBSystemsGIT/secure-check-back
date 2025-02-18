@@ -45,7 +45,8 @@ class CreateQRController extends AbstractController
         $qr->setEmail($data['email']); 
         $qr->setFirstName($data['firstname']); 
         $qr->setLastName($data['lastname']);
-        $qr->setContact($data['contact']);   
+        $qr->setContact($data['contact']);
+        $qr->setTitle($data['title']);
         $uidn = uniqid();
         $qr->setUidn(uidn: $uidn);
         $qr->setType($data["type"]);

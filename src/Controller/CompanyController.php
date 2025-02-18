@@ -69,7 +69,7 @@ class CompanyController extends AbstractController
         return $this->companyService->update($data, $company ,$file);
     }
 
-    #[Route('/company/{id}', name: 'company_delete', methods: ['DELETE'])]
+    #[Route('/api/company/{id}', name: 'company_delete', methods: ['DELETE'])]
     public function delete(Company $company): JsonResponse
     {
         return $this->companyService->delete($company);
