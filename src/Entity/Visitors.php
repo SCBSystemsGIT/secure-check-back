@@ -113,6 +113,10 @@ class Visitors
     #[Groups(['visitor' , 'request'])]
     private ?string $request_time = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor' , 'request'])]
+    private ?string $request_image = null;
+
     public function __construct()
     {
         $this->requests = new ArrayCollection();
@@ -123,6 +127,18 @@ class Visitors
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getRequestImage(): ?string
+    {
+        return $this->request_image;
+    }
+
+    public function setRequestImage(string $request_image): static
+    {
+        $this->request_image = $request_image;
+
+        return $this;
     }
 
     public function getUser(): ?User

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Company;
 use App\Entity\Departements;
+use App\Entity\UserCheckIn;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +16,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use App\Helpers\Helpers;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends AbstractController
 {
@@ -114,19 +116,6 @@ class UserController extends AbstractController
             if (!empty($missingFields)) {
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
-
-            // Check if email already exists
-            $existingUser = $this->entityManager
-            ->getRepository(User::class)
-            ->findOneBy(['email' => $data['email'], 'company' => $data['company_id']]);
-
-            if ($existingUser) {
-                return $this->json([
-                    'status' => 'error',
-                    'message' => 'Cet email est déjà utilisé dans la même entreprise'
-                ], Response::HTTP_CONFLICT); // 409 Conflict response
-            }
-            
             $departmentId =1;
             // Récupérer le département
             $department = $this->entityManager
@@ -197,5 +186,42 @@ class UserController extends AbstractController
                 'message' => 'An error occurred: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    #[Route('/api/userCheckInList', name: 'user_checkin_list')]
+    public function getUserCheckInlist(EntityManagerInterface $entityManager): JsonResponse
+    {
+		$datas = $this->entityManager->getRepository(UserCheckIn::class)->findBy([], ['created_at' => 'DESC']);
+
+        $data = [];
+        foreach ($datas as $userCheckIn) {
+            $data[] = [
+                //'id' => $checkIn->getId(),
+                'user_id' => $userCheckIn->getQrUser()->getId(),
+                'user_email' => $userCheckIn->getQrUser()->getEmail(),
+                'user_name' => $userCheckIn->getQrUser()->getFirstname(),
+                'user_name' => $userCheckIn->getQrUser()->getFirstname(),
+                'company_id' => $userCheckIn->getQrUser()->getCompany()?->getId(),
+                //->getVisitor()->getId(),
+                //'qr_code_id' => $checkIn->getQrCodeId(),
+                'check_in_time' => $userCheckIn->getCheckInTime() ? $userCheckIn->getCheckInTime()->format('Y-m-d H:i:s') : null,
+                'check_out_time' => $userCheckIn->getCheckOutTime() ? $userCheckIn->getCheckOutTime()->format('Y-m-d H:i:s') : null,
+                // 'created_at' => $userCheckIn->getQrUser()->getCreatedAt() ? $userCheckIn->getQrUser()->getCreatedAt()->format('Y-m-d H:i:s') : null,
+                // 'updated_at' => $userCheckIn->getQrUser() ? $userCheckIn->getUpdatedAt()->format('Y-m-d H:i:s') : null,
+            ];
+        }
+        return new JsonResponse($data);
+    }
+    #[Route('/api/user/{id}', name: 'api_delete_user', methods: ['DELETE'])]
+    public function deleteUser(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+        if (!$user) {
+            return $this->json(['message' => 'User not found'], 404);
+        }
+        $entityManager->remove($user);
+        $entityManager->flush();
+        return $this->json(['message' => 'User deleted successfully'], 200);
     }
 }

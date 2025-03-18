@@ -33,7 +33,6 @@ class CompanyService extends AbstractController
 
     public function add($data, $file)
     {
-
         // Check if a company with the same name already exists
         $existingCompany = $this->entityManager->getRepository(Company::class)
         ->findOneBy(['name' => $data['name']]);
@@ -43,8 +42,7 @@ class CompanyService extends AbstractController
                 'error' => 'Cette compagnie existe déjà.'
             ], Response::HTTP_CONFLICT); // 409 HTTP status code for conflict
         }
-
-        //dd($data);
+        
         $company = new Company();
         $company->setName(name: $data['name'])
             ->setAddress($data["address"])
@@ -131,6 +129,8 @@ class CompanyService extends AbstractController
         ->setCompanyField($data["company_field"])
         ->setCountry($data["country"])
         ->setCity($data["city"])
+        ->setState($data["state"])
+        ->setTitle($data["title"])
         ->setZipcode($data["zipcode"])
         ->setNumberOfEmployee($data["number_of_employee"])
         ->generateSlug($this->slugger)

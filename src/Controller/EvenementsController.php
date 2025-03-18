@@ -84,12 +84,17 @@ class EvenementsController extends AbstractController
      * @return JsonResponse
      */
 
+     public function generateSlug($slugger, $randomString = '')
+    {
+        $this->slug = $slugger->slug($this->name)->lower() . '-' . $randomString;
+        return $this;
+    }
+
     #[Route('/api/evenement/create', name: 'api_create_evenements', methods: ['POST'])]
     public function createUser(Request $request): Response
     {
         try {
             $data = json_decode($request->getContent(), true);
-            //dd($data);
             if ($data === null) {
                 throw new \InvalidArgumentException('Invalid JSON data');
             }
@@ -100,7 +105,6 @@ class EvenementsController extends AbstractController
                 'company_id',
                 'location',
                 // 'departement_id', 
-                'address_name',
                 'date_event',
                 'time_event'
             ];
@@ -140,6 +144,10 @@ class EvenementsController extends AbstractController
             $event->setCompany($company);
             $event->setLocation($data["location"]);
             $event->setAddressName($data["address_name"]);
+            $event->setState($data["state"]);
+            $event->setZipcode($data["zipcode"]);
+            $event->setCountry($data["country"]);
+            $event->setCity($data["city"]);
             $event->setDepartement($department);
             $event->setDateEvent($dateEvent);
             $event->setTimeEvent($timeEvent);

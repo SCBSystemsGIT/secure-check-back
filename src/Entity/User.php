@@ -80,6 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $contact = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(['users'])]
     private ?Company $company = null;
 
     public function __construct()

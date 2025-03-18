@@ -45,58 +45,56 @@ class EventAttendanceController extends AbstractController
     #[Route('/api/eventattendencelist', name: 'app_event_attendance')]
     public function geteventattendencelist(EntityManagerInterface $entityManager): JsonResponse
     {
-		/*$data = [
-    [
-        'id' => 1,
-        'name' => 'Tech Corp',
-        'description' => 'A leading technology company specializing in AI solutions.',
-        'slug' => 'tech-corp',
-        'logo' => 'https://example.com/logos/tech-corp.png',
-    ],
-    [
-        'id' => 2,
-        'name' => 'Green Innovators',
-        'description' => 'Pioneering eco-friendly and sustainable products.',
-        'slug' => 'green-innovators',
-        'logo' => 'https://example.com/logos/green-innovators.png',
-    ],
-    [
-        'id' => 3,
-        'name' => 'Finance Hub',
-        'description' => 'Your trusted partner for financial planning and investment.',
-        'slug' => 'finance-hub',
-        'logo' => 'https://example.com/logos/finance-hub.png',
-    ],
-    [
-        'id' => 4,
-        'name' => 'EduLearn',
-        'description' => 'Online education platform offering diverse courses.',
-        'slug' => 'edulearn',
-        'logo' => 'https://example.com/logos/edulearn.png',
-    ],
-    [
-        'id' => 5,
-        'name' => 'Foodies Delight',
-        'description' => 'Connecting food lovers with the best culinary experiences.',
-        'slug' => 'foodies-delight',
-        'logo' => 'https://example.com/logos/foodies-delight.png',
-    ],
-];*/
-$datas = $entityManager->getRepository(Evenements::class)->findBy([], ['date_event' => 'DESC', 'time_event' => 'DESC']);
-foreach ($datas as $event) {
-   $event_id = (string) $event->getId();
-    $visitors = $entityManager->getRepository(Visitors::class)->findBy(['evenements' => $event_id]);
-    if ($visitors) {
-        $responseData[] = [
-            'event' => $event,
-            'visitors' => $visitors,
-        ];
+
+        $datas = $entityManager->getRepository(Evenements::class)->findBy([], ['date_event' => 'DESC', 'time_event' => 'DESC']);
+        foreach ($datas as $event) {
+            $event_id = (string) $event->getId();
+            $visitors = $entityManager->getRepository(Visitors::class)->findBy(['evenements' => $event_id]);
+            if ($visitors) {
+                $responseData[] = [
+                    'event' => $event,
+                    'visitors' => $visitors,
+                ];
+            }
+            
+        }
+        // Return the response as a JSON
+        return $this->json($responseData, 200, [], [
+            'groups' => ['visitor', 'evenements'], // Include both groups
+        ]);      
     }
-    
-}
-// Return the response as a JSON
-return $this->json($responseData, 200, [], [
-    'groups' => ['visitor', 'evenements'], // Include both groups
-]);      
+
+    #[Route('/api/event/visitorLog/{companySlug}', name: 'visitor_evenements_by_company', methods: ['GET'])]
+    public function visitorListByCompanyEvent(EntityManagerInterface $entityManager, $companySlug): Response
+    {
+        $company = $entityManager->getRepository(Company::class)->findOneBy(['slug' => $companySlug]);
+
+        if (!$company) {
+            return $this->json([
+                "error" => 'Company not found',
+            ], 404);
+        }
+
+        $datas = $entityManager->getRepository(Evenements::class)->findBy(['company' => $company],  [ 'time_event' => 'DESC']);
+        $responseData = [];
+
+        foreach ($datas as $event) {
+            $event_id = (string) $event->getId();
+            $visitors = $entityManager->getRepository(Visitors::class)->findBy(['evenements' => $event_id]);
+
+            if ($visitors) {
+                $responseData[] = [
+                    'visitorCount' => count($visitors),
+                    'event' => $event, // Ensure event object is properly serialized if needed
+                    'visitors' => $visitors,
+                ];
+            }
+        }
+        // Return the response as a JSON
+        return $this->json($responseData, 200, [], [
+            'groups' => ['visitors','visitor', 'evenements'], // Include both groups
+        ]);
     }
+
+
 }

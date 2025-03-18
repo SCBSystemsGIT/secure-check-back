@@ -30,6 +30,14 @@ class QRCodes
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups(groups: ['request'])]
+    private ?string $request_event = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(groups: ['request'])]
+    private ?string $request_meeting = null;
+
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $expiration_date = null;
 
@@ -106,6 +114,27 @@ class QRCodes
     {
         $this->type = $type;
 
+        return $this;
+    }
+
+    public function getRequestEvent(): ?string
+    {
+        return $this->request_event;
+    }
+    public function setRequestEvent(string $request_event): static
+    {
+        $this->request_event = $request_event;
+
+        return $this;
+    }
+
+    public function getRequestMeeting(): ?string
+    {
+        return $this->request_meeting;
+    }
+    public function setRequestMeeting(string $request_meeting): static
+    {
+        $this->request_meeting = $request_meeting;
         return $this;
     }
 

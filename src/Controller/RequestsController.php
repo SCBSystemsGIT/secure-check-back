@@ -94,7 +94,7 @@ class RequestsController extends AbstractController
                 ], 404);
             }
         }
-
+        
         $finalDatas = [];
         $datas = $entityManager->getRepository(Requests::class)->findBy(
             [],
@@ -169,13 +169,20 @@ class RequestsController extends AbstractController
             if ($visiteur) {
                 $request_datas->setVisitor($visiteur);
             }
-
+            
             $request_datas->setUser($user);
             $request_datas->setVisitor($visiteur);
             $request_datas->setHost($data['host']);
             $request_datas->setReason($data['reason']);
             $request_datas->setRequestDate(new \DateTime());
             $request_datas->setCreatedAt(new \DateTimeImmutable());
+            
+            if (strtolower(trim($data['reason'])) === 'not applicable') {
+                $request_datas->setResponseDate(new \DateTime());
+                $request_datas->setUpdatedAt(new \DateTimeImmutable());
+                $request_datas->setStatus(1);
+                $request_datas->setConfirmed(1);
+            }
 
             // Save the visitor entity
             $this->entityManager->persist($request_datas);
