@@ -201,6 +201,8 @@ class UserController extends AbstractController
                 'user_email' => $userCheckIn->getQrUser()->getEmail(),
                 'user_name' => $userCheckIn->getQrUser()->getFirstname(),
                 'user_name' => $userCheckIn->getQrUser()->getFirstname(),
+                'user_phone' => $userCheckIn->getQrUser()->getContact(),
+                'image' =>  $userCheckIn->getQrUser()->getUserImage(),
                 'company_id' => $userCheckIn->getQrUser()->getCompany()?->getId(),
                 //->getVisitor()->getId(),
                 //'qr_code_id' => $checkIn->getQrCodeId(),

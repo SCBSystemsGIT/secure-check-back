@@ -214,7 +214,8 @@ class Helpers extends AbstractController
                 'host' => $host_name,
             ];
 
-            $url = $this->getParameter('domain_name_no_auth') . "/api/get-qr-data/" . $uidn;
+            // $url = $this->getParameter('domain_name_no_auth') . "/api/get-qr-data/" . $uidn;
+            $url = $this->getParameter('domain_front') . "/scan/" . $uidn;
             // $jsonData = json_encode($data);
 
             // 2. Chiffrement des données

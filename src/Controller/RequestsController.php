@@ -61,8 +61,24 @@ class RequestsController extends AbstractController
             [],
             ["created_at" => "DESC"]
         );
+        $formattedData = [];
+        foreach ($datas as $request) {
+            $visitor = $request->getVisitor();
+            $checkIns =  $visitor->getCheckIns();
+    
+             $checkInTimes = [];
+            foreach ($checkIns as $checkIn) {
+                $checkInTimes []= $checkIn->getCheckInTime()?->format('Y-m-d H:i:s');
+
+            }
+            $formattedData = [
+             "checkIns" => $checkInTimes,
+            ];
+        }
+        
         return $this->json($datas, 200, [], [
-            'groups' => 'request'
+            'groups' => 'request',
+            'formattedData'=>$formattedData,
         ]);
     }
 

@@ -29,77 +29,77 @@ class GetQrCodeResultController extends AbstractController
         private QRUserRepository $qrUserCodesRepo,
         private Security $security
     ) {}
-    #[Route('/api/get-qr-data/{uidn}',  methods: ['GET'])]
-    public function getQrResult($uidn, Request $request)
+    #[Route('/api/get-qr-data/{uidn}', methods: ['GET'])]
+    public function getQrResult($uidn, Request $request): JsonResponse
     {
-        $isManual = $request->query->get('type');
-        $user = $this->security->getUser();
-        
-         // Get token from the cookie
-        //  $token = $request->cookies->get('token');
-
-        //  if (!$token) {
-        //      return new JsonResponse(['message' => 'No token found in cookies'], 401);
-        //  }
-
+        $isManual = $request->query->get('type') === 'manual';
+        $authHeader = $request->headers->get('Authorization');
+    
+        if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Authorization header missing or invalid'], 401);
+        }
+    
+        $token = str_replace('Bearer ', '', $authHeader);
+    
+        // (Optional) Validate token here if needed
+    
         $qr = $this->qRCodesRepo->findOneBy(['uidn' => $uidn]);
-
-        if (!empty($qr)) {
-            if ($qr->isUsed()) {
-                return $this->json(
-                    [
-                        'status' => 'success',
-                        'message' => "Déja utilisé",
-                    ],
-                    Response::HTTP_OK
-                );
-            }
-        } else {
-            return $this->json(
-                [
-                    'status' => 'success',
-                    'message' => "Non Valide"
-                ],
-                Response::HTTP_OK
-            );
+    
+        if (!$qr) {
+            return $this->json([
+                'status' => 'error',
+                'message' => "QR non trouvé"
+            ], Response::HTTP_NOT_FOUND);
         }
-
-
-        $currentDateTime = new DateTime();
+    
+        if ($qr->isUsed()) {
+            return $this->json([
+                'status' => 'success',
+                'message' => "Déjà utilisé"
+            ]);
+        }
+    
+        $currentDateTime = new \DateTime();
         if ($currentDateTime > $qr->getExpirationDate()) {
-            return $this->json(
-                [
-                    'status' => 'error',
-                    'message' => "Le QR code a expiré"
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
+            return $this->json([
+                'status' => 'error',
+                'message' => "Le QR code a expiré"
+            ], Response::HTTP_BAD_REQUEST);
         }
-
+    
         $isAlreadyCheckIn = $this->checkInsRepo->findBy(['qr_code' => $qr]);
-        if (sizeof($isAlreadyCheckIn) > 0) {
+    
+        if (count($isAlreadyCheckIn) > 0) {
             $this->updateCheckIn($qr);
-
+            $message = "CheckOut effectué";
+    
             if ($isManual) {
                 return $this->json([
                     'status' => 'success',
-                    'message' => "CheckOut éffectué"
-                ], Response::HTTP_OK);
+                    'message' => $message
+                ]);
             }
-            $url = $this->getParameter('domain_front') . '/success-checkout/' . $uidn;
-                return $this->redirect($url);
+    
+            return $this->json([
+                'status' => 'success',
+                'redirect' => $this->getParameter('domain_front') . '/success-checkout/' . $uidn
+            ]);
         }
-
+    
         $this->saveCheckIn($qr);
-
+        $message = "CheckIn effectué";
+    
         if ($isManual) {
             return $this->json([
                 'status' => 'success',
-                'message' => "CheckIn éffectué"
-            ], Response::HTTP_OK);
+                'message' => $message
+            ]);
         }
-        $url = $this->getParameter('domain_front') . '/success-checkin/' . $uidn;
-        return $this->redirect($url);
+    
+        return $this->json([
+            'status' => 'success',
+            'redirect' => $this->getParameter('domain_front') . '/success-checkin/' . $uidn
+        ]);
     }
 
 
@@ -254,33 +254,71 @@ class GetQrCodeResultController extends AbstractController
         $this->em->flush();
     }
 
+    // public function updateUserCheckIn($qr)
+    // {
+    //     $userCheckIn = $this->userCheckInRepo->findOneBy(['qr_user' => $qr]);
+    //     if (!$userCheckIn) {
+    //         throw new \Exception('Check-in not found for the provided QR code.');
+    //     }
+
+    //     if ($qr->getType() == 'permanent') {
+    //         if ($userCheckIn->getCheckOutTime() !== null) {
+    //             $userCheckIn->setCheckInTime(new DateTimeImmutable());  
+    //             $userCheckIn->setCheckOutTime(null); 
+    //         } else {
+    //             $userCheckIn->setCheckOutTime(new DateTimeImmutable());
+    //         }
+    //     } else {
+    //         if ($userCheckIn->getCheckOutTime() === null) {
+    //             $userCheckIn->setCheckOutTime(new DateTimeImmutable());
+    //         } else {
+    //             throw new \Exception('Temporary QR code has already been checked out.');
+    //         }
+
+    //         $qr->setUsed(true);  
+    //         $this->em->persist($qr);
+    //     }
+
+    //     $this->em->persist($userCheckIn); 
+    //     $this->em->flush(); 
+    // }
+
     public function updateUserCheckIn($qr)
     {
-        $userCheckIn = $this->userCheckInRepo->findOneBy(['qr_user' => $qr]);
+        
+        $userCheckIn = $this->userCheckInRepo->findOneBy(
+            ['qr_user' => $qr],
+            ['check_in_time' => 'DESC']
+        );
+    
         if (!$userCheckIn) {
             throw new \Exception('Check-in not found for the provided QR code.');
         }
-
+    
         if ($qr->getType() == 'permanent') {
             if ($userCheckIn->getCheckOutTime() !== null) {
-                $userCheckIn->setCheckInTime(new DateTimeImmutable());  
-                $userCheckIn->setCheckOutTime(null); 
+                $createdDate = $qr->getCreatedAt() ?? new \DateTimeImmutable();
+                $newCheckIn = new UserCheckIn();
+                $newCheckIn->setQrUser($qr);
+                $newCheckIn->setCheckInTime(new \DateTimeImmutable());
+                $newCheckIn->setCreatedAt($createdDate);
+                $this->em->persist($newCheckIn);
             } else {
-                $userCheckIn->setCheckOutTime(new DateTimeImmutable());
+                $userCheckIn->setCheckOutTime(new \DateTimeImmutable());
+                $this->em->persist($userCheckIn);
             }
         } else {
             if ($userCheckIn->getCheckOutTime() === null) {
-                $userCheckIn->setCheckOutTime(new DateTimeImmutable());
+                $userCheckIn->setCheckOutTime(new \DateTimeImmutable());
+                $this->em->persist($userCheckIn);
             } else {
                 throw new \Exception('Temporary QR code has already been checked out.');
             }
-
-            $qr->setUsed(true);  
+            $qr->setUsed(true);
             $this->em->persist($qr);
         }
-
-        $this->em->persist($userCheckIn); 
-        $this->em->flush(); 
+    
+        $this->em->flush();
     }
     
 }
