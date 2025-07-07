@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Company;
 use App\Entity\Departements;
+use App\Entity\UserCheckIn;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +16,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use App\Helpers\Helpers;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends AbstractController
 {
@@ -44,20 +46,29 @@ class UserController extends AbstractController
     #[Route('/api/user/list', name: 'app_user', methods: ['GET'])]
     public function userList(EntityManagerInterface $entityManager): Response
     {
-        $datas = $entityManager->getRepository(User::class)->findAll(array("create_at" => "DESC"));
+        $user = $this->getUser();
+        // dd($userId);
+        $userId = $user->getId();
+        $queryBuilder = $entityManager->getRepository(User::class)->createQueryBuilder('u');
+        $queryBuilder->where('u.id != :userId')
+             ->orderBy('u.create_at', 'ASC')
+             ->setParameter('userId', $userId);
+        $datas = $queryBuilder->getQuery()->getResult();
         return $this->json($datas, 200, [], [
             'groups' => 'users'
         ]);
     }
-
-
+    
     /**
      * @return Response
      **/
     #[Route('/api/user/list/{companySlug}', name: 'app_user_by_comp', methods: ['GET'])]
     public function userListComp(EntityManagerInterface $entityManager, $companySlug): Response
     {
-
+        $user = $this->getUser();
+        //dd($user);
+        $userId = $user->getId();
+        //dd($userId);
         $company = $entityManager->getRepository(Company::class)
             ->findOneBy(['slug' => $companySlug]);
 
@@ -67,7 +78,13 @@ class UserController extends AbstractController
             ], 404);
         }
 
-        $datas = $entityManager->getRepository(User::class)->findBy(['company' => $company], array("create_at" => "DESC"));
+        $queryBuilder = $entityManager->getRepository(User::class)->createQueryBuilder('u');
+        $queryBuilder->where('u.company = :company')
+             ->andWhere('u.id != :userId')
+             ->setParameter('company', $company)
+             ->setParameter('userId', $userId)
+             ->orderBy('u.create_at', 'DESC');
+        $datas = $queryBuilder->getQuery()->getResult();
         return $this->json($datas, 200, [], [
             'groups' => 'users'
         ]);
@@ -92,18 +109,18 @@ class UserController extends AbstractController
             }
 
             // Define required fields
-            $requiredFields = ['name', 'firstname', 'email', 'password', 'role', 'title', 'department_id', 'company_id'];
+            $requiredFields = ['name', 'firstname', 'email', 'password', 'role', 'title', 'company_id'];
 
             // Validate required fields using the helper function
             $missingFields = $this->Helpers->validateRequiredFields($data, $requiredFields);
             if (!empty($missingFields)) {
                 throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missingFields));
             }
-
+            $departmentId =1;
             // Récupérer le département
             $department = $this->entityManager
                 ->getRepository(Departements::class)
-                ->find($data["department_id"]);
+                ->find($departmentId);
             // ->findOneBy(["name"=>$data["department_id"]]);
             if (!$department) {
                 throw new \InvalidArgumentException('Invalid department_id');
@@ -169,5 +186,39 @@ class UserController extends AbstractController
                 'message' => 'An error occurred: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    #[Route('/api/userCheckInList', name: 'user_checkin_list')]
+    public function getUserCheckInlist(EntityManagerInterface $entityManager): JsonResponse
+    {
+		$datas = $this->entityManager->getRepository(UserCheckIn::class)->findBy([], ['created_at' => 'DESC']);
+        $data = [];
+        foreach ($datas as $userCheckIn) {
+            // dd($userCheckIn);
+            $data[] = [
+                //'id' => $checkIn->getId(),
+                'user_id' => $userCheckIn->getQrUser()->getId(),
+                'user_email' => $userCheckIn->getQrUser()->getEmail(),
+                'user_name' => $userCheckIn->getQrUser()->getFirstname(),
+                'user_name' => $userCheckIn->getQrUser()->getFirstname(),
+                'user_phone' => $userCheckIn->getQrUser()->getContact(),
+                'image' =>  $userCheckIn->getQrUser()->getUserImage(),
+                'company_id' => $userCheckIn->getQrUser()->getCompany()?->getId(),
+                'check_logs' => $userCheckIn->getCheckLog() ?? [],
+            ];
+        }
+        return new JsonResponse($data);
+    }
+    #[Route('/api/user/{id}', name: 'api_delete_user', methods: ['DELETE'])]
+    public function deleteUser(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+        if (!$user) {
+            return $this->json(['message' => 'User not found'], 404);
+        }
+        $entityManager->remove($user);
+        $entityManager->flush();
+        return $this->json(['message' => 'User deleted successfully'], 200);
     }
 }

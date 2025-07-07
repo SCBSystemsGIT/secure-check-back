@@ -30,16 +30,21 @@ class Visitors
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['visitor', 'evenements'])]
+    #[Groups(['visitor', 'evenements', 'request'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['visitor'])]
+    #[Groups(['visitor' , 'request'])]
     private ?string $contact = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['visitor'])]
+    #[Groups(['visitor', 'request'])]
     private ?string $address = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor', 'request'])]
+    private ?string $organisationName = null;
+
 
     #[ORM\Column]
     #[Groups(['visitor'])]
@@ -68,8 +73,8 @@ class Visitors
     #[Groups(['request'])]
     private Collection $checkIns;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $organisationName = null;
+    // #[ORM\Column(length: 255, nullable: true)]
+    // private ?string $organisationName = null;
 
     #[ORM\Column(length: 255)]
     private ?string $idNumber = null;
@@ -84,6 +89,34 @@ class Visitors
     #[ORM\ManyToOne(inversedBy: 'visitors')]
     private ?Company $company = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor' , 'request'])]
+    private ?string $state = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor', 'request'])]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor', 'request'])]
+    private ?string $zipcode = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor', 'request'])]
+    private ?string $country = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor' , 'request'])]
+    private ?string $request_date = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor' , 'request'])]
+    private ?string $request_time = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['visitor' , 'request'])]
+    private ?string $request_image = null;
+
     public function __construct()
     {
         $this->requests = new ArrayCollection();
@@ -94,6 +127,18 @@ class Visitors
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getRequestImage(): ?string
+    {
+        return $this->request_image;
+    }
+
+    public function setRequestImage(string $request_image): static
+    {
+        $this->request_image = $request_image;
+
+        return $this;
     }
 
     public function getUser(): ?User
@@ -164,6 +209,78 @@ class Visitors
     public function setAddress(string $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(string $state): static
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(string $country): static
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getZipCode(): ?string
+    {
+        return $this->zipcode;
+    }
+
+    public function setZipCode(string $zipcode): static
+    {
+        $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getRequestDate(): ?string
+    {
+        return $this->request_date;
+    }
+
+    public function setRequestDate(string $request_date): static
+    {
+        $this->request_date = $request_date;
+
+        return $this;
+    }
+
+    public function getRequestTime(): ?string
+    {
+        return $this->request_time;
+    }
+
+    public function setRequestTime(string $request_time): static
+    {
+        $this->request_time = $request_time;
 
         return $this;
     }

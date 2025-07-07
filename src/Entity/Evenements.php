@@ -44,9 +44,24 @@ class Evenements
 
     #[ORM\Column]
     #[Groups(['evenements'])]
-
     private ?bool $status = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements'])]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements'])]
+    private ?string $state = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements'])]
+    private ?string $country = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements'])]
+    private ?string $zipcode = null;
+    
     #[ORM\Column]
     #[Groups(['departements', 'evenements'])]
     private ?\DateTimeImmutable $created_at = null;
@@ -54,9 +69,16 @@ class Evenements
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'evenements')]
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'evenements')]
+    #[ORM\JoinColumn(name: "company_id", referencedColumnName: "id", nullable: true)]
     #[Groups(['evenements'])]
     private ?Company $company = null;
+
+    #[Groups(['evenements'])]
+    public function getCompanyId(): ?int
+    {
+        return $this->company ? $this->company->getId() : null;
+    }
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['evenements'])]
@@ -67,10 +89,10 @@ class Evenements
      */
     #[ORM\OneToMany(targetEntity: Visitors::class, mappedBy: 'evenements')]
     #[Groups(['evenements'])]
-
     private Collection $visitors;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['evenements'])]
     private ?string $addressName = null;
 
     public function __construct()
@@ -88,17 +110,22 @@ class Evenements
         return $this->name;
     }
 
-    public function generateSlug(SluggerInterface $slugger): self
+    // public function generateSlug(SluggerInterface $slugger): self
+    // {
+    //     $this->slug = $slugger->slug(strtolower($this->name))->toString();
+    //     return $this;
+    // }
+
+    public function generateSlug(SluggerInterface $slugger, $randomString = ''): self
     {
-        $this->slug = $slugger->slug(strtolower($this->name))->toString();
+        $slug = $slugger->slug($this->name)->lower();
+        $this->slug = $slug . '-' . $randomString;
         return $this;
     }
-
 
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -110,7 +137,6 @@ class Evenements
     public function setLocation(string $location): static
     {
         $this->location = $location;
-
         return $this;
     }
 
@@ -122,7 +148,6 @@ class Evenements
     public function setDateEvent(\DateTimeInterface $date_event): static
     {
         $this->date_event = $date_event;
-
         return $this;
     }
 
@@ -134,7 +159,6 @@ class Evenements
     public function setTimeEvent(\DateTimeInterface $time_event): static
     {
         $this->time_event = $time_event;
-
         return $this;
     }
 
@@ -146,7 +170,6 @@ class Evenements
     public function setDepartement(?Departements $departement): static
     {
         $this->departement = $departement;
-
         return $this;
     }
 
@@ -158,7 +181,6 @@ class Evenements
     public function setStatus(bool $status): static
     {
         $this->status = $status;
-
         return $this;
     }
 
@@ -170,7 +192,6 @@ class Evenements
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 
@@ -182,7 +203,6 @@ class Evenements
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
-
         return $this;
     }
 
@@ -194,7 +214,6 @@ class Evenements
     public function setCompany(?Company $company): static
     {
         $this->company = $company;
-
         return $this;
     }
 
@@ -206,7 +225,6 @@ class Evenements
     public function setSlug(?string $slug): static
     {
         $this->slug = $slug;
-
         return $this;
     }
 
@@ -224,19 +242,16 @@ class Evenements
             $this->visitors->add($visitor);
             $visitor->setEvenements($this);
         }
-
         return $this;
     }
 
     public function removeVisitor(Visitors $visitor): static
     {
         if ($this->visitors->removeElement($visitor)) {
-            // set the owning side to null (unless already changed)
             if ($visitor->getEvenements() === $this) {
                 $visitor->setEvenements(null);
             }
         }
-
         return $this;
     }
 
@@ -248,7 +263,50 @@ class Evenements
     public function setAddressName(string $addressName): static
     {
         $this->addressName = $addressName;
+        return $this;
+    }
 
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(string $state): static
+    {
+        $this->state = $state;
+        return $this;
+    }
+
+    public function getZipcode(): ?string
+    {
+        return $this->zipcode;
+    }
+
+    public function setZipcode(string $zipcode): static
+    {
+        $this->zipcode = $zipcode;
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(string $country): static
+    {
+        $this->country = $country;
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
         return $this;
     }
 }

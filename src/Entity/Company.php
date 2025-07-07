@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Entity\Members;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
@@ -16,12 +17,16 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company'])]
+    #[Groups(['company', 'qruser', 'members'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['evenements',"company"])]
+    #[Groups(['evenements', 'company'])]
     private ?string $name = null;
+
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Members::class, cascade: ['persist', 'remove'])]
+    #[Groups(['company'])]
+    private Collection $members;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['evenements',"company"])]
@@ -30,6 +35,54 @@ class Company
     #[ORM\Column(length: 255)]
     #[Groups(['evenements','company'])]
     private ?string $slug = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $id_number = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $email = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $phone_number = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $company_field = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $country = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $zipcode = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $number_of_employee = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $point_contact = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $state = null;
+    
+    #[ORM\Column(length: 255)]
+    #[Groups(['evenements','company'])]
+    private ?string $title = null;
 
     /**
      * @var Collection<int, Evenements>
@@ -61,6 +114,13 @@ class Company
         $this->evenements = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->visitors = new ArrayCollection();
+        $this->members = new ArrayCollection();
+    }
+
+    #[Groups(['company'])]
+    public function getMembersCount(): int
+    {
+        return $this->getMembers()->count();
     }
 
     public function getId(): ?int
@@ -76,6 +136,150 @@ class Company
     public function setName(?string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): static
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getIdNumber(): ?string
+    {
+        return $this->id_number;
+    }
+
+    public function setIdNumber(?string $id_number): static
+    {
+        $this->id_number = $id_number;
+
+        return $this;
+    }
+
+    public function getPointContact(): ?string
+    {
+        return $this->point_contact;
+    }
+
+    public function setPointContact(?string $point_contact): static
+    {
+        $this->point_contact = $point_contact;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phone_number;
+    }
+
+    public function setPhoneNumber(?string $phone_number): static
+    {
+        $this->phone_number = $phone_number;
+
+        return $this;
+    }
+
+    public function getCompanyField(): ?string
+    {
+        return $this->company_field;
+    }
+
+    public function setCompanyField(?string $company_field): static
+    {
+        $this->company_field = $company_field;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): static
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(?string $state): static
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getZipcode(): ?string
+    {
+        return $this->zipcode;
+    }
+
+    public function setZipcode(?string $zipcode): static
+    {
+        $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    public function getNumberOfEmployee(): ?string
+    {
+        return $this->number_of_employee;
+    }
+
+    public function setNumberOfEmployee(?string $number_of_employee): static
+    {
+        $this->number_of_employee = $number_of_employee;
 
         return $this;
     }
@@ -218,6 +422,35 @@ class Company
             // set the owning side to null (unless already changed)
             if ($visitor->getCompany() === $this) {
                 $visitor->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Members>
+     */
+    public function getMembers(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addMember(Members $member): static
+    {
+        if (!$this->members->contains($member)) {
+            $this->members[] = $member;
+            $member->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMember(Members $member): static
+    {
+        if ($this->members->removeElement($member)) {
+            if ($member->getCompany() === $this) {
+                $member->setCompany(null);
             }
         }
 

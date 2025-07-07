@@ -214,7 +214,7 @@ class Helpers extends AbstractController
                 'host' => $host_name,
             ];
 
-            $url = $this->getParameter('domain_name_no_auth') . "/get-qr-data/" . $uidn;
+            $url = $this->getParameter('domain_front') . "/scan/" . $uidn;
             // $jsonData = json_encode($data);
 
             // 2. Chiffrement des données
@@ -255,6 +255,33 @@ class Helpers extends AbstractController
         }
     }
 
+    public function generateEncryptEvent($visitorId, $uidn)
+    {
+        try {
+            // 1. Création de la chaîne de données pour le QR code
+            $data = [
+                'visitor_id' => $visitorId,
+                'uidn' => $uidn,
+            ];
+
+            $url = $this->getParameter('domain_name_no_auth') . "/api/get-qr-data/" . $uidn;
+           
+            $qrCode = Builder::create()
+                ->writer(new PngWriter())
+                ->data($url)
+                ->encoding(encoding: new Encoding('UTF-8'))
+                ->size(300)
+                ->build();
+            $filePath = 'qrcode/qrcode-' . $uidn . '.png';
+
+            $qrCode->saveToFile($filePath);
+            return $filePath;
+        } catch (\Exception $e) {
+            throw new \Exception('QR code generation failed: ' . $e->getMessage());
+        }
+    }
+
+
     public function generateEncryptLink($lien, $slug)
     {
         try {
@@ -281,15 +308,21 @@ class Helpers extends AbstractController
     public function generateEncryptQR($type, $data, $uidn)
     {
         try {
+            $datas = [
+                'type' => $type,
+                'uidn' => $uidn,
+                'data' => $data,
+            ];
+
+            $url = $this->getParameter('domain_front') . "/scan-user-qrcode/" . $uidn;
 
             $qrCode = Builder::create()
                 ->writer(new PngWriter())
-                ->data(json_encode($data))
+                ->data($url)
                 ->encoding(encoding: new Encoding('UTF-8'))
                 ->size(300)
                 ->build();
-
-            if($type == 'perm'){
+            if($type == 'permanent'){
                 $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';
             }else{
                 $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';
@@ -306,6 +339,59 @@ class Helpers extends AbstractController
         }
     }
 
+    public function generateMembersQR($type, $data, $uidn)
+    {
+        try {
+            // Construction d'un texte brut sans l'email
+            //dd($data);
+            $qrText = "Type|{$type}|UIDN|{$uidn}|Prenoms|{$data['firstname']}|Nom|{$data['lastname']}|Contact|{$data['contact']}|Email|{$data['email']}|Title|{$data['title']}";
+
+            // Création du QR Code
+            $qrCode = Builder::create()
+                ->writer(new PngWriter())
+                ->data($qrText)
+                ->encoding(new Encoding('UTF-8'))
+                ->size(300)
+                ->build();
+
+            // Chemin d'enregistrement du fichier PNG
+            $filePath = 'qrcode-user/qrcode-' . $uidn . '.png';
+            $qrCode->saveToFile($filePath);
+
+            return $filePath;
+
+        } catch (\Exception $e) {
+            throw new \Exception('QR code generation failed: ' . $e->getMessage());
+        }
+    }
+
+    public function generateCompanyQR($slug, $data)
+    {
+        try {
+
+            $qrCode = Builder::create()
+                ->writer(new PngWriter())
+                ->data("https://www.securecheck.info/$slug")
+                ->encoding(encoding: new Encoding('UTF-8'))
+                ->size(300)
+                ->build();
+
+         
+                $filePath = 'qrcode-company/qrcode-' . $slug . '.png';
+            
+            $qrCode->saveToFile($filePath);
+
+            return $filePath;
+
+        } catch (\Exception $e) {
+
+            throw new \Exception('QR code generation failed: ' . $e->getMessage());
+            
+        }
+    }
+
+    
+
     public function sendEmail(
         $to,
         $subject,
@@ -320,11 +406,13 @@ class Helpers extends AbstractController
 
         // Envoyer l'email avec l'adresse correcte
         $uidn = $data['uidn'];
+        $qrCodeUrl = $this->getParameter('domain_name') . "/qrcode/qrcode-$uidn.png";
         $email = (new Email())
             ->from('noreply@express54.org')
             ->to($to)
             ->subject($subject)
-            ->html($body);
+            ->html($body)
+            ->attachFromPath($qrCodeUrl, 'qrcode.png', 'image/png');
 
         //->attachFromPath("http://192.168.1.3:9999/qrcode/qrcode-$uidn.png", 'qrc-code', 'image/png');
 

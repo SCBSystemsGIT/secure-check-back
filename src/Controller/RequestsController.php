@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Company;
+use App\Entity\User;
 use App\Entity\QRCodes;
 use App\Entity\Requests;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use App\Helpers\Helpers;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class RequestsController extends AbstractController
 {
@@ -59,8 +61,24 @@ class RequestsController extends AbstractController
             [],
             ["created_at" => "DESC"]
         );
+        $formattedData = [];
+        foreach ($datas as $request) {
+            $visitor = $request->getVisitor();
+            $checkIns =  $visitor->getCheckIns();
+    
+             $checkInTimes = [];
+            foreach ($checkIns as $checkIn) {
+                $checkInTimes []= $checkIn->getCheckInTime()?->format('Y-m-d H:i:s');
+
+            }
+            $formattedData = [
+             "checkIns" => $checkInTimes,
+            ];
+        }
+        
         return $this->json($datas, 200, [], [
-            'groups' => 'request'
+            'groups' => 'request',
+            'formattedData'=>$formattedData,
         ]);
     }
 
@@ -70,27 +88,39 @@ class RequestsController extends AbstractController
     #[Route('/api/requests/list/{companySlug}', name: 'app_requests_by_comp', methods: ['GET'])]
     public function visitorsListByComp(EntityManagerInterface $entityManager, $companySlug): Response
     {
-        $company = $entityManager->getRepository(Company::class)
-            ->findOneBy(['slug' => $companySlug]);
-
-        if (empty($company)) {
-            return $this->json([
-                "error" => 'not found company',
-            ], 404);
+        
+        $user = $this->getUser();
+        $roles =  $user->getRoles();
+        if (in_array('ROLE_SecureCheck', $roles)) {
+            $datas = $entityManager->getRepository(Requests::class)->findBy(
+                [],
+                ["created_at" => "DESC"]
+            );
+            return $this->json($datas, 200, [], [
+                'groups' => 'request'
+            ]);
         }
-
+        else
+        {
+            $company = $entityManager->getRepository(Company::class)
+            ->findOneBy(['slug' => $companySlug]);
+            if (empty($company)) {
+                return $this->json([
+                    "error" => 'not found company',
+                ], 404);
+            }
+        }
+        
         $finalDatas = [];
         $datas = $entityManager->getRepository(Requests::class)->findBy(
             [],
             ["created_at" => "DESC"]
         );
-
         foreach ($datas as $data) {
             if ($data->getVisitor()?->getCompany()?->getSlug() == $company->getSlug()) {
                 array_push($finalDatas, $data);
             }
         }
-
         return $this->json($finalDatas, 200, [], [
             'groups' => 'request'
         ]);
@@ -155,12 +185,20 @@ class RequestsController extends AbstractController
             if ($visiteur) {
                 $request_datas->setVisitor($visiteur);
             }
-
+            
             $request_datas->setUser($user);
             $request_datas->setVisitor($visiteur);
             $request_datas->setHost($data['host']);
+            $request_datas->setReason($data['reason']);
             $request_datas->setRequestDate(new \DateTime());
             $request_datas->setCreatedAt(new \DateTimeImmutable());
+            
+            if (strtolower(trim($data['reason'])) === 'not applicable') {
+                $request_datas->setResponseDate(new \DateTime());
+                $request_datas->setUpdatedAt(new \DateTimeImmutable());
+                $request_datas->setStatus(1);
+                $request_datas->setConfirmed(1);
+            }
 
             // Save the visitor entity
             $this->entityManager->persist($request_datas);

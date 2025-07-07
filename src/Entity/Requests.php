@@ -52,6 +52,10 @@ class Requests
     #[Groups(['request'])]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups(['request'])]
+    private ?string $reason = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +93,18 @@ class Requests
     public function setHost(string $host): static
     {
         $this->host = $host;
+
+        return $this;
+    }
+
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    public function setReason(string $reason): static
+    {
+        $this->reason = $reason;
 
         return $this;
     }
