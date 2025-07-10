@@ -33,7 +33,6 @@ class UserInfoController extends AbstractController
             'roles' => $user->getRoles(),
             'company_id' => $user->getCompany()->getId(),
             'company' => $user->getCompany()->getSlug() ?? "scb"
-            
         ];
 
         return new JsonResponse($userInfo);
